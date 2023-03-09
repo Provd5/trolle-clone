@@ -10,6 +10,7 @@ const poppinsFont = Poppins({
   display: "swap",
 });
 
+
 const modeInitializerScript = `(function () {document.documentElement.className = window.localStorage.getItem("mode") || window.matchMedia("(prefers-color-scheme: dark)").matches && "dark" || "light";})();`;
 
 export default function RootLayout({
