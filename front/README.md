@@ -3,6 +3,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 First, run the development server:
+Js jest do dupy #ADAM
+
 
 ```bash
 npm run dev
