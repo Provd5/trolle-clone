@@ -1,6 +1,7 @@
 import { Poppins } from "next/font/google";
 
 import "styles/global.scss";
+import ModeSwitcher from "@/components/ModeSwitcher/ModeSwitcher";
 
 import DefaultHeadTags from "./DefaultHeadTags";
 
@@ -9,7 +10,6 @@ const poppinsFont = Poppins({
   subsets: ["latin", "latin-ext"],
   display: "swap",
 });
-
 
 const modeInitializerScript = `(function () {document.documentElement.className = window.localStorage.getItem("mode") || window.matchMedia("(prefers-color-scheme: dark)").matches && "dark" || "light";})();`;
 
@@ -26,6 +26,7 @@ export default function RootLayout({
       <body className={poppinsFont.className}>
         <script dangerouslySetInnerHTML={{ __html: modeInitializerScript }} />
         {children}
+        <ModeSwitcher />
       </body>
     </html>
   );
