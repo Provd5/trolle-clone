@@ -1,0 +1,53 @@
+// prettier-ignore
+{
+  "extends": [
+    "prettier",
+    "next/core-web-vitals",
+    // "next/babel"
+  ],
+  "plugins": [
+    "simple-import-sort",
+    "unused-imports",
+    "prettier"
+  ],
+  "rules": {
+    "no-console": "warn",
+    "unused-imports/no-unused-imports-ts": "error",
+    "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          [
+            "^react",
+            "^next",
+            "^@next",
+            "^\\w"
+          ],
+          [
+            "^(config)"
+          ],
+          // Absolute imports and Relative imports.
+          [
+            "^(type|types)"
+          ],
+          [
+            "^(services|utils|lib|hooks|dictionary)"
+          ],
+          [
+            "^(contexts|context)"
+          ],
+          [
+            "^(layout)",
+            "^(templates|components|features)"
+          ],
+          // for styles imports.
+          [
+            "^[^.]",
+            "^[^.][.]"
+          ]
+        ]
+      }
+    ]
+  }
+}

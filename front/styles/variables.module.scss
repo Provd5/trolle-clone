@@ -1,0 +1,45 @@
+// colors
+$primaryBlack: hsl(0, 0%, 14%); // #242424
+$secondaryBlack: hsl(0, 0%, 16%); // #292929
+$primaryWhite: hsl(0, 0%, 100%); // #ffffff
+$secondaryWhite: hsl(0, 0%, 96%); // #F5F5F5
+
+html.dark {
+  --colorScheme: dark;
+  --primaryBlack: hsl(0, 0%, 14%);
+  --secondaryBlack: hsl(0, 0%, 16%);
+  --primaryWhite: hsl(0, 0%, 100%);
+  --secondaryWhite: hsl(0, 0%, 96%);
+}
+
+html.light {
+  --colorScheme: light;
+  --primaryBlack: hsl(0, 0%, 100%);
+  --secondaryBlack: hsl(0, 0%, 96%);
+  --primaryWhite: hsl(0, 0%, 14%);
+  --secondaryWhite: hsl(0, 0%, 16%);
+}
+
+// borders
+$borderRadiusIcons: 30%;
+$borderRadius: 1em;
+
+// font
+$fontWeightLight: 300;
+$fontWeightRegular: 400;
+$fontWeightSemiBold: 600;
+$fontWeightBold: 700;
+
+$fontSizeXs: 12px;
+
+$fontSizeS: 14px;
+$fontLineHeightS: 16px;
+
+$fontSizeM: 16px;
+$fontLineHeightM: 24px;
+
+$fontSizeL: 24px;
+$fontLineHeightL: 32px;
+
+$fontSizeXl: 32px;
+$fontLineHeightXl: 48px;
