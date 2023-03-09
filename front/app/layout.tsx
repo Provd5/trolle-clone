@@ -1,7 +1,8 @@
-import "styles/global.scss";
 import { Poppins } from "next/font/google";
-import DefaultHeadTags from "./DefaultHeadTags";
 
+import "styles/global.scss";
+
+import DefaultHeadTags from "./DefaultHeadTags";
 const poppinsFont = Poppins({
   weight: ["300", "400", "600", "700"],
   subsets: ["latin", "latin-ext"],
