@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import styles from "./ModeSwitcher.module.scss";
-
 export default function ModeSwitcher() {
   const [mode, setMode] = useState<"light" | "dark">("light");
 
@@ -25,7 +23,7 @@ export default function ModeSwitcher() {
   }
 
   return (
-    <div className={styles.wrapper}>
+    <div className="fixed z-99 top-2 md:top-auto right-2 md:right-3 bottom-auto md:bottom-3">
       <button onClick={() => changeMode()} aria-label="switchMode">
         change mode
       </button>

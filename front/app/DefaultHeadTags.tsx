@@ -22,13 +22,6 @@ export default function DefaultHeadTags() {
       <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#59c230" />
       <meta name="msapplication-TileColor" content="#df8a57" />
       <meta name="theme-color" content="#ffffff" />
-
-      <meta charSet="UTF-8" />
-      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-      <title>Projekt T.U.T.E.L</title>
-      <meta name="description" content="Projekt T.U.T.E.L" />
     </>
   );
 }

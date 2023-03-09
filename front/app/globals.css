@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* main.main {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 180px;
+    padding-bottom: 60px;
+  } */
+
+#indent {
+  padding-left: 10px;
+}
