@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
 
 export default function ModeSwitcher() {
   const [mode, setMode] = useState<"light" | "dark">("light");
+  const [isModeLoaded, setIsModeLoaded] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.contains("light") && setMode("dark");
+    setIsModeLoaded(true);
   }, []);
 
   function changeMode() {
@@ -23,10 +26,14 @@ export default function ModeSwitcher() {
   }
 
   return (
-    <div className="fixed z-99 top-2 md:top-auto right-2 md:right-3 bottom-auto md:bottom-3">
-      <button onClick={() => changeMode()} aria-label="switchMode">
-        change mode
+    isModeLoaded && (
+      <button
+        onClick={() => changeMode()}
+        aria-label="switchMode"
+        className="btnIcon"
+      >
+        {mode === "light" ? <BsFillSunFill /> : <BsFillMoonFill />}
       </button>
-    </div>
+    )
   );
 }

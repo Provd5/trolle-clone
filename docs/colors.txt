@@ -1,0 +1,3 @@
+green: #48A024 #59C230 #7DCE5C
+yellow: #F3C23B #F1E12B
+brown: #A05423 #C76D33 #DF8A57

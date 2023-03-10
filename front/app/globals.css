@@ -9,6 +9,19 @@
     padding-top: 180px;
     padding-bottom: 60px;
   } */
+@layer components {
+  .content {
+    @apply pt-8;
+  }
+
+  .innerContent {
+    @apply flex flex-col gap-3 pt-12 pl-0 md:pt-0 md:pl-24;
+  }
+
+  .btnIcon {
+    @apply flex h-6 w-6 items-center justify-center rounded-md md:h-9 md:w-9;
+  }
+}
 
 #indent {
   padding-left: 10px;
