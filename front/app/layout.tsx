@@ -1,7 +1,8 @@
 import { Poppins } from "next/font/google";
 import clsx from "clsx";
 
-import ModeSwitcher from "components/ModeSwitcher/ModeSwitcher";
+import Sidebar from "components/Navbars/Sidebar";
+import Topbar from "components/Navbars/Topbar";
 
 import "./globals.css";
 
@@ -40,8 +41,11 @@ export default function RootLayout({
         )}
       >
         <script dangerouslySetInnerHTML={{ __html: modeInitializerScript }} />
-        {children}
-        <ModeSwitcher />
+        <Topbar />
+        <div className="content">
+          <Sidebar />
+          <div className="innerContent">{children}</div>
+        </div>
       </body>
     </html>
   );
