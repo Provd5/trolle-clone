@@ -1,0 +1,9 @@
+pc: sidebar po lewej, na gorze wyszukiwarka, kategorie kolo siebie(jak za dlugie to scroll) i karty jednak pod druga pod kategoriami, przenoszenie przez drag
+mobile: sidebar na gorze, karty jedna pod druga i zmiana kategori przez przelaczanie, przycisk do przenoszenia kart miedzy kategoriami
+
+wejscie do karty to edycja i details
+zapisywanie tekstu enterem albo automatycznie
+
+zmiana koloru tla pod kartami
+
+kazde konto ma dostep do swoich tablic w ktorych sa karty i kategorie
