@@ -26,14 +26,13 @@ export default function ModeSwitcher() {
   }
 
   return (
-    isModeLoaded && (
-      <button
-        onClick={() => changeMode()}
-        aria-label="switchMode"
-        className="btnIcon"
-      >
-        {mode === "light" ? <BsFillSunFill /> : <BsFillMoonFill />}
-      </button>
-    )
+    <button
+      onClick={() => changeMode()}
+      aria-label="switchMode"
+      className="btnIcon"
+    >
+      {isModeLoaded &&
+        (mode === "light" ? <BsFillSunFill /> : <BsFillMoonFill />)}
+    </button>
   );
 }
