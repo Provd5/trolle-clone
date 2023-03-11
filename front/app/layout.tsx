@@ -37,14 +37,16 @@ export default function RootLayout({
       <body
         className={clsx(
           poppinsFont.className,
-          "bg-white text-black dark:bg-black dark:text-white"
+          "bg-white text-base text-black dark:bg-black dark:text-white"
         )}
       >
         <script dangerouslySetInnerHTML={{ __html: modeInitializerScript }} />
-        <Topbar />
-        <div className="content">
-          <Sidebar />
-          <div className="innerContent">{children}</div>
+        <div className="relative flex h-full flex-col">
+          <Topbar />
+          <main className="flex flex-none grow flex-col md:flex-row">
+            <Sidebar />
+            {children}
+          </main>
         </div>
       </body>
     </html>

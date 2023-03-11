@@ -1,10 +1,9 @@
+import Board from "components/BoardsContent/Board/Board";
+
 export default function Home() {
   return (
-    <main className="main">
-      <p>
-        Consectetur nulla mollit laborum consectetur ipsum enim reprehenderit
-        fugiat.
-      </p>
-    </main>
+    <section className="h-full w-full overflow-hidden">
+      <Board />
+    </section>
   );
 }

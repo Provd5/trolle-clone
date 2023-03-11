@@ -4,7 +4,16 @@ export const DummyData: ContentDataStructure = {
   boards: [
     {
       id: "board-1",
-      columnsOrder: ["column-1", "column-2", "column-3"],
+      columnsOrder: [
+        "column-1",
+        "column-2",
+        "column-3",
+        "column-4",
+        "column-5",
+        "column-6",
+        "column-7",
+        "column-8",
+      ],
       columns: [
         {
           id: "column-1",
@@ -119,6 +128,41 @@ export const DummyData: ContentDataStructure = {
               title: "Card13 Title",
             },
           ],
+        },
+        {
+          id: "column-4",
+          boardId: "board-1",
+          title: "testesttes123",
+          cardsOrder: [],
+          cards: [],
+        },
+        {
+          id: "column-5",
+          boardId: "board-1",
+          title: "testesttes123",
+          cardsOrder: [],
+          cards: [],
+        },
+        {
+          id: "column-6",
+          boardId: "board-1",
+          title: "testesttes123",
+          cardsOrder: [],
+          cards: [],
+        },
+        {
+          id: "column-7",
+          boardId: "board-1",
+          title: "testesttes123",
+          cardsOrder: [],
+          cards: [],
+        },
+        {
+          id: "column-8",
+          boardId: "board-1",
+          title: "testesttes123",
+          cardsOrder: [],
+          cards: [],
         },
       ],
     },
