@@ -4,13 +4,13 @@ module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontSize: {
-      sm: ["12px", "14px"],
-      base: ["14px", "16px"],
-      xl: ["16px", "18px"],
-      "2xl": ["18px", "20px"],
-      "3xl": ["20px", "22px"],
-      "4xl": ["22px", "24px"],
-      "5xl": ["24px", "26px"],
+      sm: ["12px", "16px"],
+      base: ["14px", "18px"],
+      xl: ["16px", "20px"],
+      "2xl": ["18px", "22px"],
+      "3xl": ["20px", "24px"],
+      "4xl": ["22px", "26px"],
+      "5xl": ["24px", "28px"],
     },
     extend: {
       colors: {
