@@ -29,7 +29,7 @@ export default function ModeSwitcher() {
     <button
       onClick={() => changeMode()}
       aria-label="switchMode"
-      className="btnIcon"
+      className="btnIcon hover:bg-neutral-500/30"
     >
       {isModeLoaded &&
         (mode === "light" ? <BsFillSunFill /> : <BsFillMoonFill />)}
