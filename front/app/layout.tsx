@@ -37,7 +37,7 @@ export default function RootLayout({
       <body
         className={clsx(
           poppinsFont.className,
-          "bg-white text-base text-black dark:bg-black dark:text-white"
+          "text-color bg-white text-base dark:bg-black"
         )}
       >
         <script dangerouslySetInnerHTML={{ __html: modeInitializerScript }} />

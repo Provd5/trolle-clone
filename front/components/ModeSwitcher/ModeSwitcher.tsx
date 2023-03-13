@@ -1,38 +1,48 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
+
+const Colors = [
+  "light",
+  "dark",
+  "rose",
+  "fuchsia",
+  "blue",
+  "cyan",
+  "green",
+  "lime",
+  "amber",
+] as const;
+
+type ColorType = (typeof Colors)[number];
 
 export default function ModeSwitcher() {
-  const [mode, setMode] = useState<"light" | "dark">("light");
   const [isModeLoaded, setIsModeLoaded] = useState(false);
 
   useEffect(() => {
-    document.documentElement.classList.contains("light") && setMode("dark");
+    (document.documentElement.classList.contains("light") &&
+      window.localStorage.setItem("mode", "light")) ||
+      (document.documentElement.classList.contains("dark") &&
+        window.localStorage.setItem("mode", "dark"));
     setIsModeLoaded(true);
   }, []);
 
-  function changeMode() {
-    if (mode !== "dark") {
-      setMode("dark");
-      document.documentElement.className = mode;
-      window.localStorage.setItem("mode", mode);
-    }
-    if (mode !== "light") {
-      setMode("light");
-      document.documentElement.className = mode;
-      window.localStorage.setItem("mode", mode);
-    }
+  function changeMode(color: ColorType) {
+    document.documentElement.className = color;
+    window.localStorage.setItem("mode", color);
   }
 
   return (
-    <button
-      onClick={() => changeMode()}
-      aria-label="switchMode"
-      className="btnIcon hover:bg-neutral-500/30"
-    >
-      {isModeLoaded &&
-        (mode === "light" ? <BsFillSunFill /> : <BsFillMoonFill />)}
-    </button>
+    <div className="flex flex-wrap gap-3">
+      {isModeLoaded && (
+        <>
+          {Colors.map((color) => (
+            <div key={color} onClick={() => changeMode(color)}>
+              {color}
+            </div>
+          ))}
+        </>
+      )}
+    </div>
   );
 }
