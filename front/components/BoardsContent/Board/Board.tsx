@@ -22,20 +22,20 @@ export default function Board() {
   }, []);
 
   return (
-    <div className="relative flex h-full flex-col bg-neutral-100 dark:bg-neutral-900">
+    <div className="bg-gradient-t relative flex h-full flex-col">
       {!board ? (
         <div className="flex w-full items-center justify-center p-5">
           Ładowanie tablicy...
         </div>
       ) : (
         <>
-          <div className="flex items-center justify-between bg-neutral-200 p-3 dark:bg-neutral-800">
+          <div className="flex min-h-[40px] items-center justify-between py-3 px-4">
             <div>Board title</div>
             <div>jakas ikona</div>
           </div>
           <div className="boardBodyScrollBar relative mb-2 h-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden md:snap-none">
             <div className="absolute inset-0 flex">
-              <div className="flex gap-3 p-3">
+              <div className="flex gap-2 px-2 pb-2">
                 {columns &&
                   columns.map((column: ColumnTypes) => (
                     <Column column={column} key={column.id} />
