@@ -33,16 +33,21 @@ export default function ModeSwitcher() {
   }
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <>
       {isModeLoaded && (
-        <>
+        <div className="grid grid-cols-3 gap-1">
           {Colors.map((color) => (
-            <div key={color} onClick={() => changeMode(color)}>
-              {color}
-            </div>
+            <button
+              key={color}
+              onClick={() => changeMode(color)}
+              className="h-10 w-10 rounded hover:opacity-75 md:h-16 md:w-16"
+              style={{
+                background: `linear-gradient(45deg, var(--${color}-1), var(--${color}-2))`,
+              }}
+            />
           ))}
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }

@@ -1,8 +1,8 @@
 import { Poppins } from "next/font/google";
 import clsx from "clsx";
 
+import Navbar from "components/Navbars/Navbar";
 import Sidebar from "components/Navbars/Sidebar";
-import Topbar from "components/Navbars/Topbar";
 
 import "./globals.css";
 
@@ -37,16 +37,15 @@ export default function RootLayout({
       <body
         className={clsx(
           poppinsFont.className,
-          "text-color bg-white text-base dark:bg-black"
+          "bg-white text-base text-white dark:bg-black"
         )}
       >
         <script dangerouslySetInnerHTML={{ __html: modeInitializerScript }} />
         <div className="relative flex h-full flex-col">
-          <Topbar />
-          <main className="flex flex-none grow flex-col md:flex-row">
+          <Navbar>
             <Sidebar />
             {children}
-          </main>
+          </Navbar>
         </div>
       </body>
     </html>
