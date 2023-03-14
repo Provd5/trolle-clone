@@ -22,7 +22,7 @@ export default function Board() {
   }, []);
 
   return (
-    <div className="bg-gradient-t relative flex h-full flex-col">
+    <div className="gradient-dir-1 relative flex h-full flex-col">
       {!board ? (
         <div className="flex w-full items-center justify-center p-5">
           Ładowanie tablicy...

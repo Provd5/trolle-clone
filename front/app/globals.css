@@ -4,17 +4,41 @@
 
 @layer components {
   .btn-icon {
-    @apply flex h-6 w-6 items-center justify-center rounded-md md:h-9 md:w-9;
+    @apply flex h-6 w-6 items-center justify-center rounded-md hover:bg-neutral-50/30 md:h-9 md:w-9;
+  }
+  .border-default {
+    @apply border-neutral-300/20;
   }
   .bg-gradient {
-    @apply bg-gradient-to-bl from-[var(--gradient-from)] to-[var(--gradient-to)];
+    @apply bg-gradient-to-bl from-[var(--current-1)] to-[var(--current-2)];
   }
-  .bg-gradient-t {
-    @apply bg-gradient bg-gradient-to-t;
+  .gradient-dir-1 {
+    @apply bg-gradient bg-gradient-to-b;
   }
-  .bg-gradient-tr {
+  .gradient-dir-2 {
     @apply bg-gradient bg-gradient-to-tr;
   }
+}
+
+:root {
+  --light-1: hsl(210, 5%, 50%);
+  --light-2: hsl(200, 5%, 55%);
+  --dark-1: hsl(240, 10%, 25%);
+  --dark-2: hsl(230, 10%, 30%);
+  --rose-1: hsl(355, 70%, 40%);
+  --rose-2: hsl(350, 70%, 45%);
+  --fuchsia-1: hsl(300, 55%, 35%);
+  --fuchsia-2: hsl(295, 55%, 40%);
+  --blue-1: hsl(215, 75%, 50%);
+  --blue-2: hsl(210, 75%, 55%);
+  --cyan-1: hsl(195, 95%, 30%);
+  --cyan-2: hsl(190, 95%, 35%);
+  --green-1: hsl(140, 75%, 30%);
+  --green-2: hsl(130, 75%, 35%);
+  --lime-1: hsl(90, 75%, 30%);
+  --lime-2: hsl(75, 75%, 35%);
+  --amber-1: hsl(23, 75%, 40%);
+  --amber-2: hsl(25, 75%, 45%);
 }
 
 body,
@@ -25,58 +49,41 @@ html {
 html,
 html.light {
   color-scheme: light;
-  --gradient-from: hsl(200, 5%, 75%);
-  --gradient-to: hsl(204, 5%, 76%);
-  --text-color: 36 36 36;
+  --current-1: var(--light-1);
+  --current-2: var(--light-2);
 }
 html.dark {
   color-scheme: dark;
-  --gradient-from: hsl(240, 5%, 20%);
-  --gradient-to: hsl(244, 5%, 21%);
-  --text-color: 250 250 250;
+  --current-1: var(--dark-1);
+  --current-2: var(--dark-2);
 }
 html.rose {
-  --gradient-from: hsl(340, 83%, 42%);
-  --gradient-to: hsl(344, 83%, 43%);
-  --text-color: 250 250 250;
+  --current-1: var(--rose-1);
+  --current-2: var(--rose-2);
 }
 html.fuchsia {
-  --gradient-from: hsl(300, 70%, 39%);
-  --gradient-to: hsl(296, 70%, 40%);
-  --text-color: 250 250 250;
+  --current-1: var(--fuchsia-1);
+  --current-2: var(--fuchsia-2);
 }
 html.blue {
-  --gradient-from: hsl(220, 83%, 53%);
-  --gradient-to: hsl(218, 83%, 54%);
-  --text-color: 250 250 250;
+  --current-1: var(--blue-1);
+  --current-2: var(--blue-2);
 }
 html.cyan {
-  --gradient-from: hsl(194, 83%, 35%);
-  --gradient-to: hsl(190, 83%, 36%);
-  --text-color: 250 250 250;
+  --current-1: var(--cyan-1);
+  --current-2: var(--cyan-2);
 }
 html.green {
-  --gradient-from: hsl(142, 83%, 35%);
-  --gradient-to: hsl(138, 83%, 36%);
-  --text-color: 250 250 250;
+  --current-1: var(--green-1);
+  --current-2: var(--green-2);
 }
 html.lime {
-  --gradient-from: hsl(74, 83%, 35%);
-  --gradient-to: hsl(70, 83%, 36%);
-  --text-color: 250 250 250;
+  --current-1: var(--lime-1);
+  --current-2: var(--lime-2);
 }
 html.amber {
-  --gradient-from: hsl(28, 83%, 43%);
-  --gradient-to: hsl(32, 83%, 44%);
-  --text-color: 250 250 250;
-}
-
-.text-color {
-  color: rgb(var(--text-color));
-}
-
-.border-default {
-  border-color: rgba(var(--text-color) / 0.1);
+  --current-1: var(--amber-1);
+  --current-2: var(--amber-2);
 }
 
 .columnBodyScrollBar::-webkit-scrollbar {
@@ -113,11 +120,11 @@ html.amber {
 }
 
 .boardBodyScrollBar::-webkit-scrollbar-track {
-  background: rgba(var(--text-color) / 0.2);
+  background: rgba(255, 255, 255, 0.3);
 }
 .boardBodyScrollBar::-webkit-scrollbar-thumb {
-  background: rgba(var(--text-color) / 0.3);
+  background: rgba(255, 255, 255, 0.4);
 }
 .boardBodyScrollBar::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--text-color) / 0.4);
+  background: rgba(255, 255, 255, 0.5);
 }
