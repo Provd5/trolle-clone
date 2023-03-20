@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Container } from "react-smooth-dnd";
 import { DummyData } from "data/DummyData";
+import { DropResult } from "smooth-dnd";
 
 import { BoardTypes, ColumnTypes } from "types/ContentDataStructure";
 
@@ -21,6 +23,10 @@ export default function Board() {
     }
   }, []);
 
+  const onColumnDrop = (result: DropResult) => {
+    console.log(result);
+  };
+
   return (
     <div className="gradient-dir-1 relative flex h-full flex-col">
       {!board ? (
@@ -33,14 +39,26 @@ export default function Board() {
             <div>Board title</div>
             <div>jakas ikona</div>
           </div>
-          <div className="boardBodyScrollBar relative mb-2 h-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden md:snap-none">
-            <div className="absolute inset-0 flex">
-              <div className="flex gap-2 px-2 pb-2">
+          <div className="relative mb-2 h-full select-none">
+            <div className="boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-1 pb-2">
+              <Container
+                orientation="horizontal"
+                onDrop={onColumnDrop}
+                dragHandleSelector=".column-drag-handle"
+                dragClass="card-ghost"
+                dropClass="card-ghost-drop"
+                dropPlaceholder={{
+                  animationDuration: 150,
+                  showOnTop: true,
+                  className: "drop-preview",
+                }}
+                getChildPayload={(index) => columns[index]}
+              >
                 {columns &&
                   columns.map((column: ColumnTypes) => (
                     <Column column={column} key={column.id} />
                   ))}
-              </div>
+              </Container>
             </div>
           </div>
         </>
