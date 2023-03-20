@@ -20,15 +20,13 @@
     "framer-motion": "^10.3.2",
     "next": "13.2.3",
     "react": "18.2.0",
-    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
-    "react-smooth-dnd": "^0.11.1",
+    "react-smooth-dnd": "patch:react-smooth-dnd@npm:0.11.1#../.patches/react-smooth-dnd-npm-0.11.1.patch",
     "sass": "^1.58.3",
     "typescript": "4.9.5"
   },
   "devDependencies": {
-    "@types/react-beautiful-dnd": "^13.1.3",
     "autoprefixer": "^10.4.14",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
