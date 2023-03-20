@@ -22,9 +22,14 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
-    "react-smooth-dnd": "patch:react-smooth-dnd@npm:0.11.1#../.patches/react-smooth-dnd-npm-0.11.1.patch",
+    "react-smooth-dnd": "npm:0.11.1",
     "sass": "^1.58.3",
     "typescript": "4.9.5"
+  },
+  "patches": {
+    "react-smooth-dnd": {
+      "../.patches/react-smooth-dnd-npm-0.11.1.patch": "npm:react-smooth-dnd@0.11.1"
+    }
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
