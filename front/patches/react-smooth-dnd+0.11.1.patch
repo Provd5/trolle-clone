@@ -1,10 +1,10 @@
-diff --git a/dist/src/Container.d.ts b/dist/src/Container.d.ts
-index cdd0c03b8744ce35af905b5d5ce867f725f299b8..1786963d81768adc7b0fc4ac2909bbd690aac291 100644
---- a/dist/src/Container.d.ts
-+++ b/dist/src/Container.d.ts
+diff --git a/node_modules/react-smooth-dnd/dist/src/Container.d.ts b/node_modules/react-smooth-dnd/dist/src/Container.d.ts
+index 79d78a7..0e63182 100644
+--- a/node_modules/react-smooth-dnd/dist/src/Container.d.ts
++++ b/node_modules/react-smooth-dnd/dist/src/Container.d.ts
 @@ -1,11 +1,11 @@
 -import React, { Component, CSSProperties } from 'react';
-+import React, { Component, CSSProperties,PropsWithChildren } from 'react';
++import React, { Component, CSSProperties, PropsWithChildren } from 'react';
  import PropTypes from 'prop-types';
  import { ContainerOptions, SmoothDnD } from 'smooth-dnd';
  interface ContainerProps extends ContainerOptions {
@@ -16,10 +16,10 @@ index cdd0c03b8744ce35af905b5d5ce867f725f299b8..1786963d81768adc7b0fc4ac2909bbd6
      static propTypes: {
          behaviour: PropTypes.Requireable<string>;
          groupName: PropTypes.Requireable<string>;
-diff --git a/dist/src/Draggable.d.ts b/dist/src/Draggable.d.ts
-index 7ddbb5b3b13d1ea61c59a2ced1205afdbc68b647..9783d0fc33f10b6a3944b17bbe6b2c6a0e9fc6f8 100644
---- a/dist/src/Draggable.d.ts
-+++ b/dist/src/Draggable.d.ts
+diff --git a/node_modules/react-smooth-dnd/dist/src/Draggable.d.ts b/node_modules/react-smooth-dnd/dist/src/Draggable.d.ts
+index 74712be..b4828fc 100644
+--- a/node_modules/react-smooth-dnd/dist/src/Draggable.d.ts
++++ b/node_modules/react-smooth-dnd/dist/src/Draggable.d.ts
 @@ -1,10 +1,10 @@
 -import React, { Component } from 'react';
 +import React, { Component, PropsWithChildren } from 'react';
