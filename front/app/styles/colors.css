@@ -1,0 +1,60 @@
+:root {
+  --light-1: hsl(210, 5%, 50%);
+  --light-2: hsl(200, 5%, 55%);
+  --dark-1: hsl(240, 10%, 25%);
+  --dark-2: hsl(230, 10%, 30%);
+  --rose-1: hsl(355, 70%, 40%);
+  --rose-2: hsl(350, 70%, 45%);
+  --fuchsia-1: hsl(300, 55%, 35%);
+  --fuchsia-2: hsl(295, 55%, 40%);
+  --blue-1: hsl(215, 75%, 50%);
+  --blue-2: hsl(210, 75%, 55%);
+  --cyan-1: hsl(195, 95%, 30%);
+  --cyan-2: hsl(190, 95%, 35%);
+  --green-1: hsl(140, 75%, 30%);
+  --green-2: hsl(130, 75%, 35%);
+  --lime-1: hsl(90, 75%, 30%);
+  --lime-2: hsl(75, 75%, 35%);
+  --amber-1: hsl(23, 75%, 40%);
+  --amber-2: hsl(25, 75%, 45%);
+}
+
+html,
+html.light {
+  color-scheme: light;
+  --current-1: var(--light-1);
+  --current-2: var(--light-2);
+}
+html.dark {
+  color-scheme: dark;
+  --current-1: var(--dark-1);
+  --current-2: var(--dark-2);
+}
+html.rose {
+  --current-1: var(--rose-1);
+  --current-2: var(--rose-2);
+}
+html.fuchsia {
+  --current-1: var(--fuchsia-1);
+  --current-2: var(--fuchsia-2);
+}
+html.blue {
+  --current-1: var(--blue-1);
+  --current-2: var(--blue-2);
+}
+html.cyan {
+  --current-1: var(--cyan-1);
+  --current-2: var(--cyan-2);
+}
+html.green {
+  --current-1: var(--green-1);
+  --current-2: var(--green-2);
+}
+html.lime {
+  --current-1: var(--lime-1);
+  --current-2: var(--lime-2);
+}
+html.amber {
+  --current-1: var(--amber-1);
+  --current-2: var(--amber-2);
+}

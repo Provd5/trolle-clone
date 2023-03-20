@@ -1,0 +1,42 @@
+.columnBodyScrollBar::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.boardBodyScrollBar::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+
+.boardBodyScrollBar::-webkit-scrollbar-button {
+  display: block;
+  height: 4px;
+  width: 4px;
+}
+
+.columnBodyScrollBar::-webkit-scrollbar-track,
+.columnBodyScrollBar::-webkit-scrollbar-thumb,
+.boardBodyScrollBar::-webkit-scrollbar-track,
+.boardBodyScrollBar::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+}
+
+.columnBodyScrollBar::-webkit-scrollbar-track {
+  background: rgba(128, 128, 128, 0.2);
+}
+.columnBodyScrollBar::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+}
+.columnBodyScrollBar::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.4);
+}
+
+.boardBodyScrollBar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+}
+.boardBodyScrollBar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+}
+.boardBodyScrollBar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
