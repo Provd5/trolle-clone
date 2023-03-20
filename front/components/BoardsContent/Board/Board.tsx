@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Container } from "react-smooth-dnd";
+import { Container, DropResult } from "react-smooth-dnd";
 import { DummyData } from "data/DummyData";
-import { DropResult } from "smooth-dnd";
 
 import { BoardTypes, ColumnTypes } from "types/ContentDataStructure";
 
-import { MapOrder } from "utils/MapOrder";
+import { applyDrag } from "utils/applyDrag";
+import { mapOrder } from "utils/mapOrder";
 
 import Column from "../Column/Column";
 
@@ -16,15 +16,39 @@ export default function Board() {
   const [columns, setColumns] = useState<ColumnTypes[]>([]);
 
   useEffect(() => {
-    const boardData = DummyData.boards.find((item) => item.id === "board-1");
+    const boardData = DummyData.boards.find((board) => board.id === "board-1");
     if (boardData) {
       setBoard(boardData);
-      setColumns(MapOrder(boardData.columns, boardData.columnsOrder));
+      setColumns(mapOrder(boardData.columns, boardData.columnsOrder));
     }
   }, []);
 
   const onColumnDrop = (result: DropResult) => {
-    console.log(result);
+    let newColumns = [...columns];
+    newColumns = applyDrag(newColumns, result);
+
+    if (board) {
+      let newBoard = { ...board };
+      newBoard.columnsOrder = newColumns.map((column) => column.id);
+      newBoard.columns = newColumns;
+
+      setColumns(newColumns);
+      setBoard(newBoard);
+    }
+  };
+
+  const onCardDrop = (columnId: ColumnTypes["id"], result: DropResult) => {
+    if (result.addedIndex !== null || result.removedIndex !== null) {
+      let newColumns = [...columns];
+      let currentColumn = newColumns.find((column) => column.id === columnId);
+
+      if (currentColumn) {
+        currentColumn.cards = applyDrag(currentColumn.cards, result);
+        currentColumn.cardsOrder = currentColumn.cards.map((card) => card.id);
+
+        setColumns(newColumns);
+      }
+    }
   };
 
   return (
@@ -56,7 +80,11 @@ export default function Board() {
               >
                 {columns &&
                   columns.map((column: ColumnTypes) => (
-                    <Column column={column} key={column.id} />
+                    <Column
+                      column={column}
+                      key={column.id}
+                      onCardDrop={onCardDrop}
+                    />
                   ))}
               </Container>
             </div>
