@@ -98,7 +98,6 @@ export default function Board() {
                       column={column}
                       key={column.id}
                       onCardDrop={onCardDrop}
-                      setStopScrolling={setStopScrolling}
                     />
                   ))}
               </Container>

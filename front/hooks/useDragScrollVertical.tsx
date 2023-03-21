@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 
-export const useDragScroll = (
+export const useDragScrollVertical = (
   ref: React.RefObject<HTMLDivElement>,
   stopScrolling: boolean
 ) => {
   useEffect(() => {
     let isDown = false;
-    let startX: number;
-    let scrollLeft: number;
+    let startY: number;
+    let scrollTop: number;
     const el = ref.current;
 
     if (!el) {
@@ -21,18 +21,18 @@ export const useDragScroll = (
     function handleMouseDown(e: MouseEvent) {
       if (el && !stopScrolling) {
         isDown = true;
-        startX = e.pageX - el.offsetLeft;
-        scrollLeft = el.scrollLeft;
+        startY = e.pageY - el.offsetTop;
+        scrollTop = el.scrollTop;
       }
     }
 
     function handleMouseMove(e: MouseEvent) {
       if (isDown && el && !stopScrolling) {
         e.preventDefault();
-        const x = e.pageX - el.offsetLeft;
-        const walk = (x - startX) * 1.2;
-        if (walk > 60) el.scrollLeft = scrollLeft - walk + 60;
-        if (walk < -60) el.scrollLeft = scrollLeft - walk - 60;
+        const x = e.pageY - el.offsetTop;
+        const walk = (x - startY) * 1.2;
+        if (walk > 60) el.scrollTop = scrollTop - walk + 60;
+        if (walk < -60) el.scrollTop = scrollTop - walk - 60;
       }
     }
 
@@ -40,8 +40,8 @@ export const useDragScroll = (
       if (el && !stopScrolling) {
         isDown = true;
         const touch = e.touches[0];
-        startX = touch.pageX - el.offsetLeft;
-        scrollLeft = el.scrollLeft;
+        startY = touch.pageY - el.offsetTop;
+        scrollTop = el.scrollTop;
       }
     }
 
@@ -49,10 +49,10 @@ export const useDragScroll = (
       if (isDown && el && !stopScrolling) {
         e.preventDefault();
         const touch = e.touches[0];
-        const x = touch.pageX - el.offsetLeft;
-        const walk = (x - startX) * 1.2;
-        if (walk > 60) el.scrollLeft = scrollLeft - walk + 60;
-        if (walk < -60) el.scrollLeft = scrollLeft - walk - 60;
+        const x = touch.pageY - el.offsetTop;
+        const walk = (x - startY) * 1.2;
+        if (walk > 60) el.scrollTop = scrollTop - walk + 60;
+        if (walk < -60) el.scrollTop = scrollTop - walk - 60;
       }
     }
 

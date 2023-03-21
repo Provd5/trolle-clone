@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction, useRef } from "react";
+import { useRef, useState } from "react";
 import { Container, Draggable, DropResult } from "react-smooth-dnd";
 
 import { ColumnTypes } from "types/ContentDataStructure";
 
+import { useDragScrollVertical } from "hooks/useDragScrollVertical";
 import { mapOrder } from "utils/mapOrder";
 
 import Card from "../Card/Card";
@@ -10,28 +11,29 @@ import Card from "../Card/Card";
 export default function Column({
   column,
   onCardDrop,
-  setStopScrolling,
 }: {
   column: ColumnTypes;
   onCardDrop: (columnId: ColumnTypes["id"], result: DropResult) => void;
-  setStopScrolling: Dispatch<SetStateAction<boolean>>;
 }) {
   const cards = mapOrder(column.cards, column.cardsOrder);
-  const scrollRefChild = useRef(null);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [stopScrolling, setStopScrolling] = useState(false);
+  useDragScrollVertical(scrollRef, stopScrolling);
 
   return (
     <Draggable>
       <div className="mx-1 inline-block h-full">
-        <div
-          className="flex max-h-full w-64 flex-none flex-col rounded bg-neutral-200 text-black dark:bg-neutral-800 dark:text-white"
-          ref={scrollRefChild}
-        >
+        <div className="flex max-h-full w-64 flex-none flex-col rounded bg-neutral-200 text-black dark:bg-neutral-800 dark:text-white">
           <div className="column-header column-drag-handle flex w-full cursor-grab p-1 font-bold">
             <div className="w-full rounded-md p-2">
               <h1>{column.title}</h1>
             </div>
           </div>
-          <div className="column-body columnBodyScrollBar mx-1 min-h-[30px] flex-1 overflow-y-auto overflow-x-hidden px-1">
+          <div
+            className="column-body columnBodyScrollBar mx-1 min-h-[30px] flex-1 overflow-y-auto overflow-x-hidden px-1"
+            ref={scrollRef}
+          >
             <Container
               onDragStart={() => {
                 setStopScrolling(true);
