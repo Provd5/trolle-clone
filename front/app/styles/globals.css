@@ -30,6 +30,7 @@ html {
 
 .smooth-dnd-container.horizontal {
   display: flex !important;
+  flex: none;
 }
 
 .card-ghost {
