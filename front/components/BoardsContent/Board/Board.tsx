@@ -70,7 +70,9 @@ export default function Board() {
           </div>
           <div className="relative mb-2 h-full select-none">
             <div
-              className="boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-1 pb-2"
+              className={`boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-1 pb-2 ${
+                stopScrolling ? `snap-none scroll-auto` : `snap-x scroll-smooth`
+              }`}
               ref={scrollRef}
             >
               <Container
