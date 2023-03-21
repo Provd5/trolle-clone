@@ -23,7 +23,7 @@ export default function Column({
 
   return (
     <Draggable>
-      <div className="mx-1 inline-block h-full">
+      <div className="mx-1 inline-block h-full snap-center snap-normal">
         <div className="flex max-h-full w-64 flex-none flex-col rounded bg-neutral-200 text-black dark:bg-neutral-800 dark:text-white">
           <div className="column-header column-drag-handle flex w-full cursor-grab p-1 font-bold">
             <div className="w-full rounded-md p-2">
@@ -31,7 +31,9 @@ export default function Column({
             </div>
           </div>
           <div
-            className="column-body columnBodyScrollBar mx-1 min-h-[30px] flex-1 overflow-y-auto overflow-x-hidden px-1"
+            className={`column-body columnBodyScrollBar mx-1 min-h-[30px] flex-1 overflow-y-auto overflow-x-hidden px-1 ${
+              stopScrolling ? `scroll-auto` : `scroll-smooth`
+            }`}
             ref={scrollRef}
           >
             <Container

@@ -30,9 +30,8 @@ export const useDragScroll = (
       if (isDown && el && !stopScrolling) {
         e.preventDefault();
         const x = e.pageX - el.offsetLeft;
-        const walk = (x - startX) * 1.2;
-        if (walk > 60) el.scrollLeft = scrollLeft - walk + 60;
-        if (walk < -60) el.scrollLeft = scrollLeft - walk - 60;
+        const walk = (x - startX) * 2;
+        el.scrollLeft = scrollLeft - walk;
       }
     }
 
@@ -50,9 +49,8 @@ export const useDragScroll = (
         e.preventDefault();
         const touch = e.touches[0];
         const x = touch.pageX - el.offsetLeft;
-        const walk = (x - startX) * 1.2;
-        if (walk > 60) el.scrollLeft = scrollLeft - walk + 60;
-        if (walk < -60) el.scrollLeft = scrollLeft - walk - 60;
+        const walk = (x - startX) * 2;
+        el.scrollLeft = scrollLeft - walk;
       }
     }
 
