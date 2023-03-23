@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-icon {
+    @apply flex h-[28px] w-[28px] items-center justify-center rounded-md hover:bg-neutral-50/30 md:h-[36px] md:w-[36px];
+  }
+  .btn-default {
+    @apply flex items-center justify-center rounded-md px-[8px] py-[5px] hover:bg-neutral-50/30 md:px-[16px] md:py-[9px];
+  }
+  .icon {
+    @apply h-[60%] w-[60%];
+  }
+  .icon-sm {
+    @apply h-[50%] w-[50%];
+  }
+  .border-default {
+    @apply border-neutral-300/20;
+  }
+  .bg-gradient {
+    @apply bg-gradient-to-bl from-[var(--current-1)] to-[var(--current-2)];
+  }
+  .gradient-dir-1 {
+    @apply bg-gradient bg-gradient-to-b;
+  }
+  .gradient-dir-2 {
+    @apply bg-gradient bg-gradient-to-tr;
+  }
+  .drop-preview {
+    @apply m-1 border border-dashed border-black/50 bg-white/30;
+  }
+  .column-wrapper {
+    @apply mx-1 inline-block h-full snap-center snap-normal;
+  }
+}

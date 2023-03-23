@@ -13,10 +13,10 @@ export default function NavbarModalsWrapper({
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const el = modalRef.current;
+
     function handleClickOutside(event: MouseEvent | TouchEvent): void {
-      if (modalRef.current) {
-        !modalRef.current.contains(event.target as Node) && toggleModal(null);
-      }
+      el && !el.contains(event.target as Node) && toggleModal(null);
     }
 
     function handleEscKey(event: KeyboardEvent): void {
@@ -33,11 +33,12 @@ export default function NavbarModalsWrapper({
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscKey);
     };
-  });
+  }, [toggleModal]);
+
   return (
     <FocusTrap>
       <div
-        className="border-default absolute top-0 right-0 mr-3 mt-1 min-w-[100px] rounded border bg-white p-2 text-black shadow-lg"
+        className="border-default absolute top-0 right-0 z-50 mr-3 mt-1 min-w-[100px] rounded border bg-white p-2 text-black shadow-lg"
         ref={modalRef}
       >
         {children}
