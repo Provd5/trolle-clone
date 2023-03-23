@@ -4,6 +4,7 @@ import clsx from "clsx";
 import Navbar from "components/Navbars/Navbar";
 import Sidebar from "components/Navbars/Sidebar";
 
+import "./styles/tailwind.css";
 import "./styles/globals.css";
 import "./styles/colors.css";
 import "./styles/scrollbars.css";
