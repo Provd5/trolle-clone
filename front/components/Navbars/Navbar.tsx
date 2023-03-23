@@ -27,12 +27,12 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
             onClick={() => toggleModal("ColorsModal")}
             className="btn-icon"
           >
-            <MdOutlineColorLens className="h-3/5 w-3/5" />
+            <MdOutlineColorLens className="icon" />
           </button>
           <button onClick={() => toggleModal("TestModal")}>test</button>
         </div>
       </nav>
-      <main className="relative flex flex-none grow flex-col md:flex-row">
+      <main className="relative flex grow flex-col md:flex-row">
         {children}
 
         {activeModal && (
