@@ -4,7 +4,7 @@
 
 @layer components {
   .btn-icon {
-    @apply flex h-[28px] w-[28px] items-center justify-center rounded-md hover:bg-neutral-50/30 md:h-[36px] md:w-[36px];
+    @apply flex h-[28px] w-[28px] flex-none items-center justify-center rounded-md hover:bg-neutral-50/30 md:h-[36px] md:w-[36px];
   }
   .btn-default {
     @apply flex items-center justify-center rounded-md px-[8px] py-[5px] hover:bg-neutral-50/30 md:px-[16px] md:py-[9px];

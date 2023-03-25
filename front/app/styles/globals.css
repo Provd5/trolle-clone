@@ -11,6 +11,7 @@ html {
 .card-ghost {
   transition: transform 0.18s ease;
   transform: rotateZ(3deg);
+  cursor: grabbing;
 }
 
 .card-ghost-drop {

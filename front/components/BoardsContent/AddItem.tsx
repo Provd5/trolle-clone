@@ -79,7 +79,6 @@ export function AddItem({
         ? { cardsOrder: [], cards: [] }
         : { columnId: column.id, desc: "" }),
     };
-    console.log(titleToAdd);
 
     addItemFunction && addItemFunction(titleToAdd);
     setNewTitle("");
@@ -140,7 +139,7 @@ export function AddItem({
               onKeyDown={(e) => e.key === "Enter" && addNewItem()}
             />
           )}
-          <div className="mt-1.5 flex items-center gap-2 md:gap-1">
+          <div className="mt-2 flex items-center gap-2 md:gap-1">
             <button
               className="btn-default bg-[var(--current-1)] text-white hover:bg-[var(--current-2)]"
               onClick={addNewItem}
