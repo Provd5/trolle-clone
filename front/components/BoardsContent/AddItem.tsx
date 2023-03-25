@@ -1,17 +1,32 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
 
+import { BoardTypes, ColumnTypes } from "types/ContentDataStructure";
+
+import { clickOutside } from "utils/clickOutside";
+
 export function AddItem({
-  placeholder,
   title,
-  textarea = false,
-  secondary = false,
+  placeholder,
+  isBoard = false,
+  board,
+  column,
+  addItemFunction,
 }: {
   title: string;
   placeholder: string;
-  textarea?: boolean;
-  secondary?: boolean;
+  isBoard?: boolean;
+  board: BoardTypes;
+  column?: ColumnTypes;
+  addItemFunction?: (data: any) => void;
 }) {
   const [toggleInput, setToggleInput] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -19,29 +34,21 @@ export function AddItem({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const el = wrapperRef.current;
-
-    function handleClickOutside(event: MouseEvent | TouchEvent): void {
-      el && !el.contains(event.target as Node) && setToggleInput(false);
+    if (inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
     }
-
-    function handleEscKey(event: KeyboardEvent): void {
-      if (event.key === "Escape") {
-        setToggleInput(false);
-      }
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+      textareaRef.current.select();
     }
+  }, [toggleInput]);
 
-    document.addEventListener("touchstart", handleClickOutside);
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscKey);
-    return () => {
-      document.removeEventListener("touchstart", handleClickOutside);
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscKey);
-    };
-  });
+  useEffect(() => {
+    clickOutside(wrapperRef, setToggleInput, false);
+  }, []);
 
-  function AdjustHeight(ref: RefObject<HTMLElement>) {
+  function AdjustHeight(ref: RefObject<HTMLTextAreaElement>) {
     if (!ref.current) return;
     ref.current.scrollHeight > 160
       ? ((ref.current.style.overflowY = "scroll"),
@@ -52,10 +59,37 @@ export function AddItem({
     ref.current.style.height = `${ref.current.scrollHeight}px`;
   }
 
+  const [newTitle, setNewTitle] = useState("");
+  const onNewTitleChange = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+      setNewTitle(e.target.value),
+    []
+  );
+  const addNewItem = () => {
+    if (!newTitle) {
+      !isBoard ? textareaRef.current?.focus() : inputRef.current?.focus();
+      return;
+    }
+
+    const titleToAdd = {
+      id: Math.random().toString(36).substring(2, 5), // do zmiany gdy bedziemy mieli database
+      boardId: board.id,
+      title: newTitle.trim(),
+      ...(!column
+        ? { cardsOrder: [], cards: [] }
+        : { columnId: column.id, desc: "" }),
+    };
+    console.log(titleToAdd);
+
+    addItemFunction && addItemFunction(titleToAdd);
+    setNewTitle("");
+    setToggleInput(false);
+  };
+
   return (
     <div
       className={`max-h-full rounded ${
-        secondary
+        isBoard
           ? `w-64 bg-neutral-200/30 p-1 dark:bg-neutral-800/40 ${
               !toggleInput &&
               `hover:bg-neutral-200/40
@@ -72,8 +106,6 @@ export function AddItem({
           className="flex w-full items-center gap-1 rounded p-2"
           onClick={() => {
             setToggleInput(true);
-            () => inputRef.current?.focus();
-            () => textareaRef.current?.focus();
           }}
         >
           <AiOutlinePlus className="h-5 w-5" />
@@ -81,22 +113,38 @@ export function AddItem({
         </button>
       ) : (
         <div className="flex w-full flex-col p-1.5" ref={wrapperRef}>
-          {textarea ? (
+          {!isBoard ? (
             <textarea
               className="max-h-[160px] resize-none rounded p-2 text-black dark:text-white"
               placeholder={placeholder}
-              onChange={() => AdjustHeight(textareaRef)}
               ref={textareaRef}
+              defaultValue={newTitle}
+              onChange={(e) => {
+                AdjustHeight(textareaRef);
+                onNewTitleChange(e);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addNewItem();
+                }
+              }}
             />
           ) : (
             <input
               className="rounded p-2.5 text-black dark:text-white"
               placeholder={placeholder}
               ref={inputRef}
+              value={newTitle}
+              onChange={(e) => onNewTitleChange(e)}
+              onKeyDown={(e) => e.key === "Enter" && addNewItem()}
             />
           )}
           <div className="mt-1.5 flex items-center gap-2 md:gap-1">
-            <button className="btn-default bg-[var(--current-1)] text-white hover:bg-[var(--current-2)]">
+            <button
+              className="btn-default bg-[var(--current-1)] text-white hover:bg-[var(--current-2)]"
+              onClick={addNewItem}
+            >
               Dodaj
             </button>
             <button

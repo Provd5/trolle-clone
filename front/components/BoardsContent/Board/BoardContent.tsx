@@ -7,7 +7,7 @@ import { useDragScroll } from "hooks/useDragScroll";
 import { applyDrag } from "utils/applyDrag";
 import { mapOrder } from "utils/mapOrder";
 
-import { AddItem } from "components/atoms/AddItem";
+import { AddItem } from "components/BoardsContent/AddItem";
 
 import Column from "../Column/Column";
 
@@ -49,6 +49,19 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
       }
     }
   };
+
+  const addItemFunction = (data: ColumnTypes) => {
+    let newColumns = [...columns];
+    newColumns.push(data);
+
+    let newBoard = { ...board };
+    newBoard.columnsOrder = newColumns.map((column) => column.id);
+    newBoard.columns = newColumns;
+
+    setColumns(newColumns);
+    setBoard(newBoard);
+  };
+
   return (
     <div
       className={`boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-1 pb-2 ${
@@ -80,10 +93,11 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
         {columns &&
           columns.map((column: ColumnTypes) => (
             <Column
-              column={column}
               key={column.id}
+              column={column}
               onCardDrop={onCardDrop}
               setAllowDrag={setAllowDrag}
+              board={board}
             />
           ))}
       </Container>
@@ -102,7 +116,9 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
           <AddItem
             title="Dodaj kolejną listę"
             placeholder="Wpisz tytuł listy"
-            secondary
+            isBoard
+            board={board}
+            addItemFunction={addItemFunction}
           />
         </div>
       </div>

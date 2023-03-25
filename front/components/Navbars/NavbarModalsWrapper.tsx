@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import FocusTrap from "focus-trap-react";
 
+import { clickOutside } from "utils/clickOutside";
+
 import { ModalsType } from "./Navbar";
 
 export default function NavbarModalsWrapper({
@@ -13,26 +15,7 @@ export default function NavbarModalsWrapper({
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = modalRef.current;
-
-    function handleClickOutside(event: MouseEvent | TouchEvent): void {
-      el && !el.contains(event.target as Node) && toggleModal(null);
-    }
-
-    function handleEscKey(event: KeyboardEvent): void {
-      if (event.key === "Escape") {
-        toggleModal(null);
-      }
-    }
-
-    document.addEventListener("touchstart", handleClickOutside);
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscKey);
-    return () => {
-      document.removeEventListener("touchstart", handleClickOutside);
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscKey);
-    };
+    clickOutside(modalRef, toggleModal, null);
   }, [toggleModal]);
 
   return (

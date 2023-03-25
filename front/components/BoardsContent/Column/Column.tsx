@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { Container, Draggable, DropResult } from "react-smooth-dnd";
 
-import { ColumnTypes } from "types/ContentDataStructure";
+import { BoardTypes, CardTypes, ColumnTypes } from "types/ContentDataStructure";
 
 import { useDragScroll } from "hooks/useDragScroll";
 import { mapOrder } from "utils/mapOrder";
 
-import { AddItem } from "components/atoms/AddItem";
+import { AddItem } from "components/BoardsContent/AddItem";
 
 import Card from "../Card/Card";
 
@@ -14,16 +14,27 @@ export default function Column({
   column,
   onCardDrop,
   setAllowDrag,
+  board,
 }: {
   column: ColumnTypes;
   onCardDrop: (columnId: ColumnTypes["id"], result: DropResult) => void;
   setAllowDrag: Dispatch<SetStateAction<boolean>>;
+  board: BoardTypes;
 }) {
+  const [thisColumn, setThisColumn] = useState(column);
   const cards = mapOrder(column.cards, column.cardsOrder);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [stopScrollingY, setStopScrollingY] = useState(false);
   useDragScroll(scrollRef, stopScrollingY);
+
+  const addItemFunction = (data: CardTypes) => {
+    let newColumn = { ...thisColumn };
+    newColumn.cards.push(data);
+    newColumn.cardsOrder.push(data.id);
+
+    setThisColumn(newColumn);
+  };
 
   return (
     <Draggable>
@@ -74,7 +85,9 @@ export default function Column({
             <AddItem
               title="Dodaj kartę"
               placeholder="Wpisz tytuł karty..."
-              textarea
+              board={board}
+              column={column}
+              addItemFunction={addItemFunction}
             />
           </div>
         </div>
