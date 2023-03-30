@@ -9,6 +9,7 @@ import BoardContent from "./BoardContent";
 
 export default function Board() {
   const [boardData, setBoardData] = useState<BoardTypes>();
+
   useEffect(() => {
     const boardData = DummyData.boards.find((board) => board.id === "board-1");
     setBoardData(boardData);

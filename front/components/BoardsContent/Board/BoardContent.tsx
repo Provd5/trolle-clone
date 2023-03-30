@@ -7,25 +7,23 @@ import { useDragScroll } from "hooks/useDragScroll";
 import { applyDrag } from "utils/applyDrag";
 import { mapOrder } from "utils/mapOrder";
 
-import { AddItem } from "components/atoms/AddItem";
+import { AddItem } from "components/BoardsContent/AddItem";
 
 import Column from "../Column/Column";
 
 export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const [board, setBoard] = useState<BoardTypes>(boardData);
   const [columns, setColumns] = useState<ColumnTypes[]>(
     mapOrder(boardData.columns, boardData.columnsOrder)
   );
-
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [allowDrag, setAllowDrag] = useState(true);
   const [stopScrollingX, setStopScrollingX] = useState(false);
+
   useDragScroll(scrollRef, stopScrollingX, allowDrag);
 
-  const onColumnDrop = (result: DropResult) => {
-    let newColumns = [...columns];
-    newColumns = applyDrag(newColumns, result);
-
+  function newBoard(newColumns: ColumnTypes[]) {
     if (board) {
       let newBoard = { ...board };
       newBoard.columnsOrder = newColumns.map((column) => column.id);
@@ -34,6 +32,13 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
       setColumns(newColumns);
       setBoard(newBoard);
     }
+  }
+
+  const onColumnDrop = (result: DropResult) => {
+    let newColumns = [...columns];
+    newColumns = applyDrag(newColumns, result);
+
+    newBoard(newColumns);
   };
 
   const onCardDrop = (columnId: ColumnTypes["id"], result: DropResult) => {
@@ -49,6 +54,29 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
       }
     }
   };
+
+  const addItemFunction = (data: ColumnTypes) => {
+    let newColumns = [...columns];
+    newColumns.push(data);
+
+    newBoard(newColumns);
+  };
+
+  const onUpdateColumn = (
+    newColumnToUpdate: ColumnTypes & { _destroy?: boolean }
+  ) => {
+    let newColumns = [...columns];
+    const columnIndexToUpdate = newColumns.findIndex(
+      (index) => index.id === newColumnToUpdate.id
+    );
+
+    newColumnToUpdate._destroy
+      ? newColumns.splice(columnIndexToUpdate, 1)
+      : newColumns.splice(columnIndexToUpdate, 1, newColumnToUpdate);
+
+    newBoard(newColumns);
+  };
+
   return (
     <div
       className={`boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-1 pb-2 ${
@@ -59,12 +87,8 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
       ref={scrollRef}
     >
       <Container
-        onDragStart={() => {
-          setStopScrollingX(true);
-        }}
-        onDragEnd={() => {
-          setStopScrollingX(false);
-        }}
+        onDragStart={() => setStopScrollingX(true)}
+        onDragEnd={() => setStopScrollingX(false)}
         orientation="horizontal"
         onDrop={onColumnDrop}
         dragHandleSelector=".column-drag-handle"
@@ -80,29 +104,27 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
         {columns &&
           columns.map((column: ColumnTypes) => (
             <Column
-              column={column}
               key={column.id}
+              column={column}
               onCardDrop={onCardDrop}
               setAllowDrag={setAllowDrag}
+              board={board}
+              onUpdateColumn={onUpdateColumn}
             />
           ))}
       </Container>
       <div className="column-wrapper">
         <div
-          onMouseDown={() => {
-            setAllowDrag(false);
-          }}
-          onMouseUp={() => {
-            setAllowDrag(true);
-          }}
-          onMouseLeave={() => {
-            setAllowDrag(true);
-          }}
+          onMouseDown={() => setAllowDrag(false)}
+          onMouseUp={() => setAllowDrag(true)}
+          onMouseLeave={() => setAllowDrag(true)}
         >
           <AddItem
             title="Dodaj kolejną listę"
             placeholder="Wpisz tytuł listy"
-            secondary
+            isColumn
+            board={board}
+            addItemFunction={addItemFunction}
           />
         </div>
       </div>

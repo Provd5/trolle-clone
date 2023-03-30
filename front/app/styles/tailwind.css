@@ -2,12 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --current-1: var(--current-1);
+    --current-2: var(--current-2);
+    --white: 250 250 250;
+    --black: 36 36 36;
+    --error: 255 51 51;
+  }
+}
+
 @layer components {
   .btn-icon {
-    @apply flex h-[28px] w-[28px] items-center justify-center rounded-md hover:bg-neutral-50/30 md:h-[36px] md:w-[36px];
+    @apply flex h-[28px] w-[28px] flex-none items-center justify-center rounded-md hover:bg-neutral-300/50 dark:hover:bg-neutral-50/30 md:h-[36px] md:w-[36px];
   }
   .btn-default {
-    @apply flex items-center justify-center rounded-md px-[8px] py-[5px] hover:bg-neutral-50/30 md:px-[16px] md:py-[9px];
+    @apply flex items-center justify-center rounded-md px-[8px] py-[5px] md:px-[16px] md:py-[9px];
   }
   .icon {
     @apply h-[60%] w-[60%];
@@ -19,7 +29,7 @@
     @apply border-neutral-300/20;
   }
   .bg-gradient {
-    @apply bg-gradient-to-bl from-[var(--current-1)] to-[var(--current-2)];
+    @apply bg-gradient-to-bl from-current-1 to-current-2;
   }
   .gradient-dir-1 {
     @apply bg-gradient bg-gradient-to-b;
@@ -32,5 +42,8 @@
   }
   .column-wrapper {
     @apply mx-1 inline-block h-full snap-center snap-normal;
+  }
+  .dropdown-item {
+    @apply w-full cursor-pointer border-b border-neutral-300/50 p-3 hover:bg-neutral-200/50 dark:border-neutral-700/50 hover:dark:bg-neutral-800/50;
   }
 }

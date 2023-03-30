@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { RefObject, useEffect } from "react";
 
 export const useDragScroll = (
-  scrollRef: React.RefObject<HTMLDivElement>,
-  stopScrolling: boolean,
-  allowDrag?: boolean
+  scrollRef: RefObject<HTMLDivElement>,
+  stopScrolling = false,
+  allowDrag = false
 ) => {
   useEffect(() => {
     let isDown = false;
