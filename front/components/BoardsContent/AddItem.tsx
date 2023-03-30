@@ -18,43 +18,35 @@ import { adjustHeight } from "utils/adjustHeight";
 export function AddItem({
   title,
   placeholder,
-  isBoard = false,
+  isColumn = false,
   board,
   column,
   addItemFunction,
 }: {
   title: string;
   placeholder: string;
-  isBoard?: boolean;
+  isColumn?: boolean;
   board: BoardTypes;
   column?: ColumnTypes;
   addItemFunction?: (data: any) => void;
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const [toggleInput, setToggleInput] = useState(false);
   const [newTitle, setNewTitle] = useState("");
-  const [textareaHeight, setTextareaHeight] = useState<string>();
 
   useClickOutside(wrapperRef, setToggleInput, false);
   useDragScroll(textareaRef as unknown as RefObject<HTMLDivElement>);
 
   useEffect(() => {
-    const el = textareaRef.current || inputRef.current;
+    const el = textareaRef.current;
     if (el && toggleInput) {
       el.focus();
       el.select();
+      adjustHeight(textareaRef);
     }
   }, [toggleInput]);
-
-  useEffect(() => {
-    if (textareaRef.current) {
-      adjustHeight(textareaRef);
-      setTextareaHeight(textareaRef.current.style.height);
-    }
-  }, [textareaHeight, toggleInput]);
 
   const onNewTitleChange = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -65,7 +57,7 @@ export function AddItem({
 
   const addNewItem = () => {
     if (!newTitle) {
-      (isBoard ? inputRef.current : textareaRef.current)?.focus();
+      textareaRef.current?.focus();
       return;
     }
 
@@ -84,15 +76,14 @@ export function AddItem({
       textareaRef.current.value = "";
       textareaRef.current.focus();
       adjustHeight(textareaRef);
-      setTextareaHeight(textareaRef.current.style.height);
     }
-    if (inputRef.current) setToggleInput(false);
+    if (isColumn) setToggleInput(false);
   };
 
   return (
     <div
       className={`max-h-full rounded ${
-        isBoard
+        isColumn
           ? `w-64 bg-neutral-200/30 p-1 dark:bg-neutral-800/40 ${
               !toggleInput &&
               `hover:bg-neutral-200/40
@@ -116,42 +107,25 @@ export function AddItem({
         </button>
       ) : (
         <div className="flex w-full flex-col p-1.5" ref={wrapperRef}>
-          {!isBoard ? (
-            <textarea
-              className="max-h-[160px] resize-none rounded p-2 text-black dark:text-white"
-              placeholder={placeholder}
-              ref={textareaRef}
-              defaultValue={newTitle}
-              onChange={(e) => {
-                setTextareaHeight(e.target.style.height);
-                adjustHeight(textareaRef);
-                onNewTitleChange(e);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  addNewItem();
-                }
-              }}
-            />
-          ) : (
-            <input
-              className="rounded p-2.5 text-black dark:text-white"
-              placeholder={placeholder}
-              ref={inputRef}
-              value={newTitle}
-              onChange={(e) => onNewTitleChange(e)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  addNewItem();
-                }
-              }}
-            />
-          )}
+          <textarea
+            className="max-h-[160px] resize-none rounded p-2 text-black dark:text-white"
+            placeholder={placeholder}
+            ref={textareaRef}
+            defaultValue={newTitle}
+            onChange={(e) => {
+              adjustHeight(textareaRef);
+              onNewTitleChange(e);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                addNewItem();
+              }
+            }}
+          />
           <div className="mt-2 flex items-center gap-2 md:gap-1">
             <button
-              className="btn-default bg-[var(--current-1)] text-white hover:bg-[var(--current-2)]"
+              className="btn-default bg-current-1 text-white hover:bg-current-2"
               onClick={addNewItem}
             >
               Dodaj

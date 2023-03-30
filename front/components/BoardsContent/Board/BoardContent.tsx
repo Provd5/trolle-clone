@@ -23,10 +23,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
 
   useDragScroll(scrollRef, stopScrollingX, allowDrag);
 
-  const onColumnDrop = (result: DropResult) => {
-    let newColumns = [...columns];
-    newColumns = applyDrag(newColumns, result);
-
+  function newBoard(newColumns: ColumnTypes[]) {
     if (board) {
       let newBoard = { ...board };
       newBoard.columnsOrder = newColumns.map((column) => column.id);
@@ -35,6 +32,13 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
       setColumns(newColumns);
       setBoard(newBoard);
     }
+  }
+
+  const onColumnDrop = (result: DropResult) => {
+    let newColumns = [...columns];
+    newColumns = applyDrag(newColumns, result);
+
+    newBoard(newColumns);
   };
 
   const onCardDrop = (columnId: ColumnTypes["id"], result: DropResult) => {
@@ -55,17 +59,23 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
     let newColumns = [...columns];
     newColumns.push(data);
 
-    let newBoard = { ...board };
-    newBoard.columnsOrder = newColumns.map((column) => column.id);
-    newBoard.columns = newColumns;
-
-    setColumns(newColumns);
-    setBoard(newBoard);
+    newBoard(newColumns);
   };
 
-  // const onUpdateColumn = (newColumnToUpdate:) => {
-  //   console.log(newColumnToUpdate);
-  // }
+  const onUpdateColumn = (
+    newColumnToUpdate: ColumnTypes & { _destroy?: boolean }
+  ) => {
+    let newColumns = [...columns];
+    const columnIndexToUpdate = newColumns.findIndex(
+      (index) => index.id === newColumnToUpdate.id
+    );
+
+    newColumnToUpdate._destroy
+      ? newColumns.splice(columnIndexToUpdate, 1)
+      : newColumns.splice(columnIndexToUpdate, 1, newColumnToUpdate);
+
+    newBoard(newColumns);
+  };
 
   return (
     <div
@@ -99,6 +109,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
               onCardDrop={onCardDrop}
               setAllowDrag={setAllowDrag}
               board={board}
+              onUpdateColumn={onUpdateColumn}
             />
           ))}
       </Container>
@@ -111,7 +122,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
           <AddItem
             title="Dodaj kolejną listę"
             placeholder="Wpisz tytuł listy"
-            isBoard
+            isColumn
             board={board}
             addItemFunction={addItemFunction}
           />
