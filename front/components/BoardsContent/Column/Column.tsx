@@ -1,10 +1,10 @@
 import {
   Dispatch,
+  FocusEvent,
   RefObject,
   SetStateAction,
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -28,60 +28,41 @@ export default function Column({
   onCardDrop,
   setAllowDrag,
   board,
+  onUpdateColumn,
 }: {
   column: ColumnTypes;
   onCardDrop: (columnId: ColumnTypes["id"], result: DropResult) => void;
   setAllowDrag: Dispatch<SetStateAction<boolean>>;
   board: BoardTypes;
+  onUpdateColumn: (newColumnToUpdate: ColumnTypes) => void;
 }) {
   const modalRef = useRef<HTMLDivElement>(null);
   const columnTitleInputRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [moreOptionsModal, setMoreOptionsModal] = useState(false);
-  const [toggleColumnTitleInput, setToggleColumnTitleInput] = useState(false);
   const [stopScrollingY, setStopScrollingY] = useState(false);
+  const [toggleColumnTitleInput, setToggleColumnTitleInput] = useState(false);
   const [thisColumn, setThisColumn] = useState(column);
   const [columnTitle, setColumnTitle] = useState(column.title);
-  const [textareaHeight, setTextareaHeight] = useState<string>();
 
   const cards = mapOrder(column.cards, column.cardsOrder);
 
-  useLayoutEffect(() => {
-    if (toggleColumnTitleInput) {
-      columnTitleInputRef.current?.focus();
-      columnTitleInputRef.current?.select();
-    }
-  }, [columnTitleInputRef, toggleColumnTitleInput]);
-
-  useEffect(() => {
-    if (columnTitleInputRef.current) {
-      adjustHeight(columnTitleInputRef);
-      setTextareaHeight(columnTitleInputRef.current.style.height);
-    }
-  }, [textareaHeight, toggleColumnTitleInput]);
-
-  useEffect(() => {
-    columnTitle.length > 0
-      ? setColumnTitle(columnTitle)
-      : setColumnTitle("Bez nazwy");
-  }, [columnTitle, toggleColumnTitleInput]);
-
-  const toggleEditTitle = useCallback((data: boolean) => {
-    setMoreOptionsModal(false);
-    setToggleColumnTitleInput(data);
-    setTimeout(() => {
-      columnTitleInputRef.current?.focus();
-      columnTitleInputRef.current?.select();
-    }, 1);
-  }, []);
-
-  const handleChangeTitle = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setColumnTitle(e.target.value);
-    },
-    []
+  useDragScroll(scrollRef, stopScrollingY);
+  useDragScroll(
+    columnTitleInputRef as unknown as RefObject<HTMLDivElement>,
+    stopScrollingY
   );
+  useClickOutside(modalRef, setMoreOptionsModal, false);
+  useClickOutside(columnTitleInputRef, setToggleColumnTitleInput, false, true);
+
+  useEffect(() => {
+    if (toggleColumnTitleInput) {
+      adjustHeight(columnTitleInputRef);
+      columnTitleInputRef.current?.focus();
+      columnTitleInputRef.current?.select();
+    }
+  }, [toggleColumnTitleInput]);
 
   const addItemFunction = useCallback(
     (data: CardTypes) => {
@@ -94,13 +75,26 @@ export default function Column({
     [thisColumn]
   );
 
-  useDragScroll(scrollRef, stopScrollingY);
-  useDragScroll(
-    columnTitleInputRef as unknown as RefObject<HTMLDivElement>,
-    stopScrollingY
-  );
-  useClickOutside(modalRef, setMoreOptionsModal, false);
-  useClickOutside(columnTitleInputRef, setToggleColumnTitleInput, false, true);
+  const handleChangeTitle = (e: FocusEvent<HTMLTextAreaElement>) => {
+    if (e.target.value !== columnTitle) {
+      e.target.value.length > 0
+        ? setColumnTitle(e.target.value)
+        : setColumnTitle("Bez nazwy");
+      const newColumn = {
+        ...column,
+        title: columnTitle,
+      };
+      onUpdateColumn(newColumn);
+    }
+  };
+
+  const handleDeleteColumn = () => {
+    const newColumn = {
+      ...column,
+      _destroy: true,
+    };
+    onUpdateColumn(newColumn);
+  };
 
   return (
     <Draggable>
@@ -126,13 +120,11 @@ export default function Column({
                 placeholder="Podaj tytuł listy..."
                 ref={columnTitleInputRef}
                 defaultValue={columnTitle}
-                onChange={(e) => {
-                  adjustHeight(columnTitleInputRef);
-                  setTextareaHeight(e.target.style.height);
+                onChange={() => adjustHeight(columnTitleInputRef)}
+                onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+                onBlur={(e) => {
                   handleChangeTitle(e);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") e.preventDefault();
+                  setToggleColumnTitleInput(false);
                 }}
               />
             )}
@@ -145,7 +137,8 @@ export default function Column({
             {moreOptionsModal && (
               <MoreOptionsModal
                 modalRef={modalRef}
-                toggleEditTitle={toggleEditTitle}
+                handleDeleteColumn={handleDeleteColumn}
+                setMoreOptionsModal={setMoreOptionsModal}
               />
             )}
           </div>

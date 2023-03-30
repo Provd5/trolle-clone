@@ -14,16 +14,20 @@ export function useClickOutside(
 ) {
   const handleClickOutside = useCallback(
     (event: MouseEvent | TouchEvent | KeyboardEvent): void => {
+      if (!ref.current) return;
+
       if (
         event instanceof KeyboardEvent &&
         (event.key === "Escape" ||
           (enterKey && event.key === "Enter" && !event.shiftKey))
       ) {
         toggle(value);
+        ref.current.blur();
       }
 
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      if (!ref.current.contains(event.target as Node)) {
         toggle(value);
+        ref.current.blur();
       }
     },
     [ref, toggle, value, enterKey]

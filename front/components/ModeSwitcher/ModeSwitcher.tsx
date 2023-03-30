@@ -41,7 +41,7 @@ export default function ModeSwitcher() {
             onClick={() => changeMode(color)}
             className="h-10 w-10 rounded hover:opacity-75 md:h-16 md:w-16"
             style={{
-              background: `linear-gradient(45deg, var(--${color}-1), var(--${color}-2))`,
+              background: `linear-gradient(45deg, rgb(var(--${color}-1)), rgb(var(--${color}-2)))`,
             }}
           />
         ))}
