@@ -1,27 +1,51 @@
-import { Dispatch, RefObject, SetStateAction } from "react";
+import {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useCallback,
+  useEffect,
+} from "react";
 
 export function useClickOutside(
-  ref: RefObject<HTMLDivElement>,
-  setState: Dispatch<SetStateAction<boolean>>
+  ref: RefObject<any>,
+  toggle: Dispatch<SetStateAction<boolean>> | ((arg: any) => void),
+  value: any,
+  enterKey?: boolean
 ) {
-  const el = ref.current;
+  const handleClickOutside = useCallback(
+    (event: MouseEvent | TouchEvent | KeyboardEvent): void => {
+      if (
+        event instanceof KeyboardEvent &&
+        (event.key === "Escape" ||
+          (enterKey && event.key === "Enter" && !event.shiftKey))
+      ) {
+        toggle(value);
+      }
 
-  function handleClickOutside(event: MouseEvent | TouchEvent): void {
-    el && !el.contains(event.target as Node) && setState(false);
-  }
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        toggle(value);
+      }
+    },
+    [ref, toggle, value, enterKey]
+  );
 
-  function handleEscKey(event: KeyboardEvent): void {
-    if (event.key === "Escape") {
-      setState(false);
-    }
-  }
+  useEffect(() => {
+    const handleDocumentClick = (event: MouseEvent | TouchEvent) => {
+      handleClickOutside(event);
+    };
 
-  document.addEventListener("touchstart", handleClickOutside);
-  document.addEventListener("mousedown", handleClickOutside);
-  document.addEventListener("keydown", handleEscKey);
-  return () => {
-    document.removeEventListener("touchstart", handleClickOutside);
-    document.removeEventListener("mousedown", handleClickOutside);
-    document.removeEventListener("keydown", handleEscKey);
-  };
+    const handleDocumentKeyDown = (event: KeyboardEvent) => {
+      handleClickOutside(event);
+    };
+
+    document.addEventListener("mousedown", handleDocumentClick, true);
+    document.addEventListener("touchstart", handleDocumentClick, true);
+    document.addEventListener("keydown", handleDocumentKeyDown, true);
+
+    return () => {
+      document.removeEventListener("mousedown", handleDocumentClick, true);
+      document.removeEventListener("touchstart", handleDocumentClick, true);
+      document.removeEventListener("keydown", handleDocumentKeyDown, true);
+    };
+  }, [handleClickOutside]);
 }

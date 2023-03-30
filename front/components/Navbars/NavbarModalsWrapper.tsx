@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import FocusTrap from "focus-trap-react";
 
-import { clickOutside } from "utils/clickOutside";
+import { useClickOutside } from "hooks/useClickOutside";
 
 import { ModalsType } from "./Navbar";
 
@@ -14,9 +14,7 @@ export default function NavbarModalsWrapper({
 }) {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    clickOutside(modalRef, toggleModal, null);
-  }, [toggleModal]);
+  useClickOutside(modalRef, toggleModal, null);
 
   return (
     <FocusTrap>

@@ -12,14 +12,15 @@ import { AddItem } from "components/BoardsContent/AddItem";
 import Column from "../Column/Column";
 
 export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const [board, setBoard] = useState<BoardTypes>(boardData);
   const [columns, setColumns] = useState<ColumnTypes[]>(
     mapOrder(boardData.columns, boardData.columnsOrder)
   );
-
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [allowDrag, setAllowDrag] = useState(true);
   const [stopScrollingX, setStopScrollingX] = useState(false);
+
   useDragScroll(scrollRef, stopScrollingX, allowDrag);
 
   const onColumnDrop = (result: DropResult) => {
@@ -62,6 +63,10 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
     setBoard(newBoard);
   };
 
+  // const onUpdateColumn = (newColumnToUpdate:) => {
+  //   console.log(newColumnToUpdate);
+  // }
+
   return (
     <div
       className={`boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-1 pb-2 ${
@@ -72,12 +77,8 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
       ref={scrollRef}
     >
       <Container
-        onDragStart={() => {
-          setStopScrollingX(true);
-        }}
-        onDragEnd={() => {
-          setStopScrollingX(false);
-        }}
+        onDragStart={() => setStopScrollingX(true)}
+        onDragEnd={() => setStopScrollingX(false)}
         orientation="horizontal"
         onDrop={onColumnDrop}
         dragHandleSelector=".column-drag-handle"
@@ -103,15 +104,9 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
       </Container>
       <div className="column-wrapper">
         <div
-          onMouseDown={() => {
-            setAllowDrag(false);
-          }}
-          onMouseUp={() => {
-            setAllowDrag(true);
-          }}
-          onMouseLeave={() => {
-            setAllowDrag(true);
-          }}
+          onMouseDown={() => setAllowDrag(false)}
+          onMouseUp={() => setAllowDrag(true)}
+          onMouseLeave={() => setAllowDrag(true)}
         >
           <AddItem
             title="Dodaj kolejną listę"

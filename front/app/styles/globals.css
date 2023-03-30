@@ -3,6 +3,14 @@ html {
   height: 100%;
 }
 
+.overflow-anywhere {
+  overflow-wrap: anywhere;
+}
+
+.dropdown-item:last-of-type {
+  border-bottom: none;
+}
+
 .smooth-dnd-container.horizontal {
   display: flex !important;
   flex: none;

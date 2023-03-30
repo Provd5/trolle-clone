@@ -11,7 +11,9 @@ import { RxCross1 } from "react-icons/rx";
 
 import { BoardTypes, ColumnTypes } from "types/ContentDataStructure";
 
-import { clickOutside } from "utils/clickOutside";
+import { useClickOutside } from "hooks/useClickOutside";
+import { useDragScroll } from "hooks/useDragScroll";
+import { adjustHeight } from "utils/adjustHeight";
 
 export function AddItem({
   title,
@@ -28,46 +30,42 @@ export function AddItem({
   column?: ColumnTypes;
   addItemFunction?: (data: any) => void;
 }) {
-  const [toggleInput, setToggleInput] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [toggleInput, setToggleInput] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const [textareaHeight, setTextareaHeight] = useState<string>();
+
+  useClickOutside(wrapperRef, setToggleInput, false);
+  useDragScroll(textareaRef as unknown as RefObject<HTMLDivElement>);
+
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.select();
-    }
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-      textareaRef.current.select();
+    const el = textareaRef.current || inputRef.current;
+    if (el && toggleInput) {
+      el.focus();
+      el.select();
     }
   }, [toggleInput]);
 
   useEffect(() => {
-    clickOutside(wrapperRef, setToggleInput, false);
-  }, []);
+    if (textareaRef.current) {
+      adjustHeight(textareaRef);
+      setTextareaHeight(textareaRef.current.style.height);
+    }
+  }, [textareaHeight, toggleInput]);
 
-  function AdjustHeight(ref: RefObject<HTMLTextAreaElement>) {
-    if (!ref.current) return;
-    ref.current.scrollHeight > 160
-      ? ((ref.current.style.overflowY = "scroll"),
-        (ref.current.style.paddingRight = "0px"))
-      : ((ref.current.style.overflowY = "hidden"),
-        (ref.current.style.paddingRight = "15px"));
-    ref.current.style.height = "auto";
-    ref.current.style.height = `${ref.current.scrollHeight}px`;
-  }
-
-  const [newTitle, setNewTitle] = useState("");
   const onNewTitleChange = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
-      setNewTitle(e.target.value),
+    (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      setNewTitle(e.target.value);
+    },
     []
   );
+
   const addNewItem = () => {
     if (!newTitle) {
-      !isBoard ? textareaRef.current?.focus() : inputRef.current?.focus();
+      (isBoard ? inputRef.current : textareaRef.current)?.focus();
       return;
     }
 
@@ -75,14 +73,20 @@ export function AddItem({
       id: Math.random().toString(36).substring(2, 5), // do zmiany gdy bedziemy mieli database
       boardId: board.id,
       title: newTitle.trim(),
-      ...(!column
-        ? { cardsOrder: [], cards: [] }
-        : { columnId: column.id, desc: "" }),
+      ...(column
+        ? { columnId: column.id, desc: "" }
+        : { cardsOrder: [], cards: [] }),
     };
 
-    addItemFunction && addItemFunction(titleToAdd);
+    addItemFunction?.(titleToAdd);
     setNewTitle("");
-    setToggleInput(false);
+    if (textareaRef.current) {
+      textareaRef.current.value = "";
+      textareaRef.current.focus();
+      adjustHeight(textareaRef);
+      setTextareaHeight(textareaRef.current.style.height);
+    }
+    if (inputRef.current) setToggleInput(false);
   };
 
   return (
@@ -119,11 +123,12 @@ export function AddItem({
               ref={textareaRef}
               defaultValue={newTitle}
               onChange={(e) => {
-                AdjustHeight(textareaRef);
+                setTextareaHeight(e.target.style.height);
+                adjustHeight(textareaRef);
                 onNewTitleChange(e);
               }}
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   addNewItem();
                 }
@@ -136,7 +141,12 @@ export function AddItem({
               ref={inputRef}
               value={newTitle}
               onChange={(e) => onNewTitleChange(e)}
-              onKeyDown={(e) => e.key === "Enter" && addNewItem()}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addNewItem();
+                }
+              }}
             />
           )}
           <div className="mt-2 flex items-center gap-2 md:gap-1">

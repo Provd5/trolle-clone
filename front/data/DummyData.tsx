@@ -32,7 +32,7 @@ export const DummyData: ContentDataStructure = {
               id: "card-2",
               boardId: "board-1",
               columnId: "column-1",
-              title: "Card2 Title",
+              title: "pneumonoultramicroscopicsilicovolcanoconiosis",
             },
             {
               id: "card-3",
