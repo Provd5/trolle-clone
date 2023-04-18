@@ -38,7 +38,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
     let newColumns = [...columns];
     newColumns = applyDrag(newColumns, result);
 
-    newBoard(newColumns);
+    setColumns(newColumns);
   };
 
   const onCardDrop = (columnId: ColumnTypes["id"], result: DropResult) => {
@@ -59,7 +59,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
     let newColumns = [...columns];
     newColumns.push(data);
 
-    newBoard(newColumns);
+    setColumns(newColumns);
   };
 
   const onUpdateColumn = (
