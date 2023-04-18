@@ -3,13 +3,13 @@ import {
   FocusEvent,
   RefObject,
   SetStateAction,
-  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { Container, Draggable, DropResult } from "react-smooth-dnd";
+import { cloneDeep } from "lodash";
 
 import { BoardTypes, CardTypes, ColumnTypes } from "types/ContentDataStructure";
 
@@ -43,7 +43,6 @@ export default function Column({
   const [moreOptionsModal, setMoreOptionsModal] = useState(false);
   const [stopScrollingY, setStopScrollingY] = useState(false);
   const [toggleColumnTitleInput, setToggleColumnTitleInput] = useState(false);
-  const [thisColumn, setThisColumn] = useState(column);
   const [columnTitle, setColumnTitle] = useState(column.title);
 
   const cards = mapOrder(column.cards, column.cardsOrder);
@@ -64,16 +63,13 @@ export default function Column({
     }
   }, [toggleColumnTitleInput]);
 
-  const addItemFunction = useCallback(
-    (data: CardTypes) => {
-      let newColumn = { ...thisColumn };
-      newColumn.cards.push(data);
-      newColumn.cardsOrder.push(data.id);
+  const addItemFunction = (data: CardTypes) => {
+    let newColumn = cloneDeep(column);
+    newColumn.cards.push(data);
+    newColumn.cardsOrder.push(data.id);
 
-      setThisColumn(newColumn);
-    },
-    [thisColumn]
-  );
+    onUpdateColumn(newColumn);
+  };
 
   const handleChangeTitle = (e: FocusEvent<HTMLTextAreaElement>) => {
     if (e.target.value !== columnTitle) {

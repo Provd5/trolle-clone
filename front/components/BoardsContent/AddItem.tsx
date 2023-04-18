@@ -65,8 +65,8 @@ export function AddItem({
       id: Math.random().toString(36).substring(2, 5), // do zmiany gdy bedziemy mieli database
       boardId: board.id,
       title: newTitle.trim(),
-      ...(column
-        ? { columnId: column.id, desc: "" }
+      ...((column as ColumnTypes)
+        ? { columnId: column?.id, desc: "" }
         : { cardsOrder: [], cards: [] }),
     };
 
