@@ -1,8 +1,10 @@
 import * as dotenv from "dotenv";
-import { MongoClient } from "mongodb";
+import { Db, MongoClient } from "mongodb";
 dotenv.config();
 
 const uri = process.env.DB_URI;
+const dbName = process.env.DATABASE_NAME;
+let dbInstance: Db | null = null;
 
 export const connectDB = async () => {
   if (!uri || uri.trim() === "") {
@@ -10,13 +12,10 @@ export const connectDB = async () => {
   }
 
   const client = new MongoClient(uri);
+  dbInstance = client.db(dbName);
+};
 
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB");
-  } catch (err) {
-    console.log(err);
-  } finally {
-    await client.close();
-  }
+export const getDB = () => {
+  if (!dbInstance) throw new Error("DATABASE_NAME not found");
+  return dbInstance;
 };

@@ -22,6 +22,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -30,15 +39,24 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const express_1 = __importDefault(require("express"));
 const mongodb_1 = require("./config/mongodb");
-// import { mapOrder } from "utils/mapOrder";
-// mapOrder;
-const app = (0, express_1.default)();
-const hostname = process.env.SERVER_HOSTNAME || "localhost";
-const port = Number(process.env.PORT) || 4040;
-(0, mongodb_1.connectDB)().catch(console.log);
-app.get("/", (req, res) => {
-    res.send("<h1>Hello World!</h1>");
+const hostname = process.env.SERVER_HOSTNAME;
+const port = Number(process.env.SERVER_PORT);
+(0, mongodb_1.connectDB)()
+    .then(() => console.log("Connected to MongoDB!"))
+    .then(() => bootServer())
+    .catch((error) => {
+    console.error(error);
+    process.exit(1);
 });
-app.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-});
+const bootServer = () => {
+    if (!hostname || !port) {
+        throw new Error("hostname and port must be specified");
+    }
+    const app = (0, express_1.default)();
+    app.get("/test", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        res.end("<h1>Hello World!</h1>");
+    }));
+    app.listen(port, hostname, () => {
+        console.log(`Server running at http://${hostname}:${port}/`);
+    });
+};
