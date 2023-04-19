@@ -32,25 +32,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectDB = void 0;
+exports.getDB = exports.connectDB = void 0;
 const dotenv = __importStar(require("dotenv"));
 const mongodb_1 = require("mongodb");
 dotenv.config();
 const uri = process.env.DB_URI;
+const dbName = process.env.DATABASE_NAME;
+let dbInstance = null;
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     if (!uri || uri.trim() === "") {
         throw new Error("DB_URI not found");
     }
     const client = new mongodb_1.MongoClient(uri);
-    try {
-        yield client.connect();
-        console.log("Connected to MongoDB");
-    }
-    catch (err) {
-        console.log(err);
-    }
-    finally {
-        yield client.close();
-    }
+    dbInstance = client.db(dbName);
 });
 exports.connectDB = connectDB;
+const getDB = () => {
+    if (!dbInstance)
+        throw new Error("DATABASE_NAME not found");
+    return dbInstance;
+};
+exports.getDB = getDB;

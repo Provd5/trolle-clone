@@ -4,20 +4,29 @@ import express, { Express, Request, Response } from "express";
 
 import { connectDB } from "./config/mongodb";
 
-// import { mapOrder } from "utils/mapOrder";
-// mapOrder;
+const hostname = process.env.SERVER_HOSTNAME;
+const port = Number(process.env.SERVER_PORT);
 
-const app: Express = express();
+connectDB()
+  .then(() => console.log("Connected to MongoDB!"))
+  .then(() => bootServer())
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
 
-const hostname = process.env.SERVER_HOSTNAME || "localhost";
-const port = Number(process.env.PORT) || 4040;
+const bootServer = () => {
+  if (!hostname || !port) {
+    throw new Error("hostname and port must be specified");
+  }
 
-connectDB().catch(console.log);
+  const app: Express = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("<h1>Hello World!</h1>");
-});
+  app.get("/test", async (req: Request, res: Response) => {
+    res.end("<h1>Hello World!</h1>");
+  });
 
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+  app.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+  });
+};
