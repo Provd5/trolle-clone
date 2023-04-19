@@ -23,7 +23,7 @@ export default function Board() {
         </div>
       ) : (
         <>
-          <div className="flex min-h-[40px] items-center justify-between py-3 px-4">
+          <div className="flex min-h-[40px] items-center justify-between px-4 py-3">
             <div>Board title</div>
             <div>jakas ikona</div>
           </div>
