@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CardsModel = void 0;
+exports.CardModel = void 0;
 const joi_1 = __importDefault(require("joi"));
 const mongodb_1 = require("../config/mongodb");
 const collectionName = "cards";
 const collectionSchema = joi_1.default.object({
     boardId: joi_1.default.string().required(),
     columnId: joi_1.default.string().required(),
-    title: joi_1.default.string().required().min(1).max(255),
+    title: joi_1.default.string().required().min(1).max(255).trim(),
     desc: joi_1.default.string().default(null),
     cover: joi_1.default.string().default(null),
     createdAt: joi_1.default.date().timestamp().default(Date.now()),
@@ -36,7 +36,7 @@ const createNew = (data) => __awaiter(void 0, void 0, void 0, function* () {
         return result;
     }
     catch (error) {
-        console.log(error);
+        throw new Error(error);
     }
 });
-exports.CardsModel = { createNew };
+exports.CardModel = { createNew };

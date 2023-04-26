@@ -1,11 +1,20 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 
 import { connectDB } from "./config/mongodb";
+import { v1Api } from "./routes/v1";
 
 const hostname = process.env.SERVER_HOSTNAME;
 const port = Number(process.env.SERVER_PORT);
+
+export enum StatusCode {
+  OK = 200,
+  ERROR = 400,
+  UNAUTHORIZED = 401,
+  NOT_FOUND = 404,
+  SERVER_ERROR = 500,
+}
 
 connectDB()
   .then(() => console.log("Connected to MongoDB!"))
@@ -21,10 +30,8 @@ const bootServer = () => {
   }
 
   const app: Express = express();
-
-  app.get("/test", async (req: Request, res: Response) => {
-    res.end("<h1>Hello World!</h1>");
-  });
+  app.use(express.json());
+  app.use("/v1", v1Api);
 
   app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
