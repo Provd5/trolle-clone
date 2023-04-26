@@ -13,7 +13,7 @@ const createNew = async (req: Request, res: Response) => {
     } else {
       res
         .status(StatusCode.SERVER_ERROR)
-        .json({ error: "An unknown error occurred." });
+        .json({ error: StatusCode.UNKNOWN_ERROR_MSG });
     }
   }
 };
