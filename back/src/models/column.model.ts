@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { ObjectId } from "mongodb";
 
 import { getDB } from "../config/mongodb";
 
@@ -14,7 +15,7 @@ interface dataTypes {
 const collectionName = "columns";
 const collectionSchema = Joi.object({
   boardId: Joi.string().required(),
-  title: Joi.string().required().min(1).max(255),
+  title: Joi.string().required().min(1).max(255).trim(),
   cardsOrder: Joi.array().items(Joi.string().default([])),
   createdAt: Joi.date().timestamp().default(Date.now()),
   updatedAt: Joi.date().timestamp().default(null),
@@ -31,8 +32,23 @@ const createNew = async (data: dataTypes) => {
     const result = await getDB().collection(collectionName).insertOne(value);
     return result;
   } catch (error) {
-    console.log(error);
+    throw new Error(error as string);
   }
 };
 
-export const ColumnModel = { createNew };
+const update = async (id: ObjectId, data: dataTypes) => {
+  try {
+    const result = await getDB()
+      .collection(collectionName)
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: data },
+        { returnDocument: "after" }
+      );
+    return result.value;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export const ColumnModel = { createNew, update };

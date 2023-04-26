@@ -22,25 +22,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.StatusCode = void 0;
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const express_1 = __importDefault(require("express"));
 const mongodb_1 = require("./config/mongodb");
+const v1_1 = require("./routes/v1");
 const hostname = process.env.SERVER_HOSTNAME;
 const port = Number(process.env.SERVER_PORT);
+var StatusCode;
+(function (StatusCode) {
+    StatusCode[StatusCode["OK"] = 200] = "OK";
+    StatusCode[StatusCode["ERROR"] = 400] = "ERROR";
+    StatusCode[StatusCode["UNAUTHORIZED"] = 401] = "UNAUTHORIZED";
+    StatusCode[StatusCode["NOT_FOUND"] = 404] = "NOT_FOUND";
+    StatusCode[StatusCode["SERVER_ERROR"] = 500] = "SERVER_ERROR";
+})(StatusCode = exports.StatusCode || (exports.StatusCode = {}));
 (0, mongodb_1.connectDB)()
     .then(() => console.log("Connected to MongoDB!"))
     .then(() => bootServer())
@@ -53,9 +54,8 @@ const bootServer = () => {
         throw new Error("hostname and port must be specified");
     }
     const app = (0, express_1.default)();
-    app.get("/test", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        res.end("<h1>Hello World!</h1>");
-    }));
+    app.use(express_1.default.json());
+    app.use("/v1", v1_1.v1Api);
     app.listen(port, hostname, () => {
         console.log(`Server running at http://${hostname}:${port}/`);
     });

@@ -12,28 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BoardModel = void 0;
+exports.BoardValidation = void 0;
 const joi_1 = __importDefault(require("joi"));
-const mongodb_1 = require("../config/mongodb");
-const collectionName = "boards";
-const collectionSchema = joi_1.default.object({
-    title: joi_1.default.string().required().min(1).max(255).trim(),
-    columnsOrder: joi_1.default.array().items(joi_1.default.string().default([])),
-    createdAt: joi_1.default.date().timestamp().default(Date.now()),
-    updatedAt: joi_1.default.date().timestamp().default(null),
-    _destroy: joi_1.default.boolean().default(false),
-});
-const validateSchema = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield collectionSchema.validateAsync(data, { abortEarly: false });
-});
-const createNew = (data) => __awaiter(void 0, void 0, void 0, function* () {
+const server_1 = require("../server");
+const createNew = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const condition = joi_1.default.object({
+        title: joi_1.default.string().required().min(1).max(255),
+    });
     try {
-        const value = yield validateSchema(data);
-        const result = yield (0, mongodb_1.getDB)().collection(collectionName).insertOne(value);
-        return result;
+        yield condition.validateAsync(req.body, { abortEarly: false });
+        next();
     }
     catch (error) {
-        throw new Error(error);
+        res
+            .status(server_1.StatusCode.ERROR)
+            .json({ error: new Error(error).message });
     }
 });
-exports.BoardModel = { createNew };
+exports.BoardValidation = { createNew };

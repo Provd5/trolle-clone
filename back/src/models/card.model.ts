@@ -17,7 +17,7 @@ const collectionName = "cards";
 const collectionSchema = Joi.object({
   boardId: Joi.string().required(),
   columnId: Joi.string().required(),
-  title: Joi.string().required().min(1).max(255),
+  title: Joi.string().required().min(1).max(255).trim(),
   desc: Joi.string().default(null),
   cover: Joi.string().default(null),
   createdAt: Joi.date().timestamp().default(Date.now()),
@@ -35,8 +35,8 @@ const createNew = async (data: dataTypes) => {
     const result = await getDB().collection(collectionName).insertOne(value);
     return result;
   } catch (error) {
-    console.log(error);
+    throw new Error(error as string);
   }
 };
 
-export const CardsModel = { createNew };
+export const CardModel = { createNew };

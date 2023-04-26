@@ -14,11 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ColumnModel = void 0;
 const joi_1 = __importDefault(require("joi"));
-const mongodb_1 = require("../config/mongodb");
+const mongodb_1 = require("mongodb");
+const mongodb_2 = require("../config/mongodb");
 const collectionName = "columns";
 const collectionSchema = joi_1.default.object({
     boardId: joi_1.default.string().required(),
-    title: joi_1.default.string().required().min(1).max(255),
+    title: joi_1.default.string().required().min(1).max(255).trim(),
     cardsOrder: joi_1.default.array().items(joi_1.default.string().default([])),
     createdAt: joi_1.default.date().timestamp().default(Date.now()),
     updatedAt: joi_1.default.date().timestamp().default(null),
@@ -30,11 +31,22 @@ const validateSchema = (data) => __awaiter(void 0, void 0, void 0, function* () 
 const createNew = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const value = yield validateSchema(data);
-        const result = yield (0, mongodb_1.getDB)().collection(collectionName).insertOne(value);
+        const result = yield (0, mongodb_2.getDB)().collection(collectionName).insertOne(value);
         return result;
     }
     catch (error) {
-        console.log(error);
+        throw new Error(error);
     }
 });
-exports.ColumnModel = { createNew };
+const update = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, mongodb_2.getDB)()
+            .collection(collectionName)
+            .findOneAndUpdate({ _id: new mongodb_1.ObjectId(id) }, { $set: data }, { returnDocument: "after" });
+        return result.value;
+    }
+    catch (error) {
+        throw new Error(error);
+    }
+});
+exports.ColumnModel = { createNew, update };
