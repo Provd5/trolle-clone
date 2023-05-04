@@ -7,17 +7,19 @@ import { BoardTypes } from "types/ContentDataStructure";
 
 import BoardContent from "./BoardContent";
 
-export default function Board() {
-  const [boardData, setBoardData] = useState<BoardTypes>();
+export default function Board(boardData: BoardTypes) {
+  const [board, setBoard] = useState<BoardTypes>();
 
   useEffect(() => {
-    const boardData = DummyData.boards.find((board) => board.id === "board-1");
-    setBoardData(boardData);
-  }, []);
+    const board = boardData
+      ? boardData
+      : DummyData.boards.find((board) => board._id === "board-1");
+    setBoard(board);
+  }, [boardData]);
 
   return (
     <div className="gradient-dir-1 relative flex h-full flex-col">
-      {!boardData ? (
+      {!board ? (
         <div className="flex w-full items-center justify-center p-5">
           Ładowanie tablicy...
         </div>
@@ -28,7 +30,7 @@ export default function Board() {
             <div>jakas ikona</div>
           </div>
           <div className="relative mb-2 h-full select-none">
-            <BoardContent boardData={boardData} />
+            <BoardContent boardData={board} />
           </div>
         </>
       )}

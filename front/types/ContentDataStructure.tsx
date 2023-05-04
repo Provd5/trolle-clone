@@ -3,23 +3,34 @@ export interface ContentDataStructure {
 }
 
 export interface BoardTypes {
-  id: string | number;
-  columnsOrder: (string | number)[];
+  _id: string;
+  title: string;
+  createdAt: number;
+  updatedAt?: number | null;
+  _destroy: boolean;
+  columnsOrder?: string[] | null;
   columns: ColumnTypes[];
 }
 
 export interface ColumnTypes {
-  id: string | number;
-  boardId: string | number;
-  cardsOrder: (string | number)[];
+  _id: string;
   title: string;
+  boardId: string;
+  createdAt: number;
+  updatedAt?: number | null;
+  _destroy: boolean;
+  cardsOrder?: string[] | null;
   cards: CardTypes[];
 }
 
 export interface CardTypes {
-  id: string | number;
-  boardId: string | number;
-  columnId: string | number;
+  _id: string;
   title: string;
-  desc?: string;
+  boardId: string;
+  columnId: string;
+  desc?: string | null;
+  cover?: null;
+  createdAt: number;
+  updatedAt?: number | null;
+  _destroy: boolean;
 }
