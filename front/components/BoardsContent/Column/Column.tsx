@@ -31,7 +31,7 @@ export default function Column({
   onUpdateColumn,
 }: {
   column: ColumnTypes;
-  onCardDrop: (columnId: ColumnTypes["id"], result: DropResult) => void;
+  onCardDrop: (columnId: ColumnTypes["_id"], result: DropResult) => void;
   setAllowDrag: Dispatch<SetStateAction<boolean>>;
   board: BoardTypes;
   onUpdateColumn: (newColumnToUpdate: ColumnTypes) => void;
@@ -45,7 +45,9 @@ export default function Column({
   const [toggleColumnTitleInput, setToggleColumnTitleInput] = useState(false);
   const [columnTitle, setColumnTitle] = useState(column.title);
 
-  const cards = mapOrder(column.cards, column.cardsOrder);
+  const cards = column.cardsOrder
+    ? mapOrder(column.cards, column.cardsOrder)
+    : column.cards;
 
   useDragScroll(scrollRef, stopScrollingY);
   useDragScroll(
@@ -66,7 +68,7 @@ export default function Column({
   const addItemFunction = (data: CardTypes) => {
     let newColumn = cloneDeep(column);
     newColumn.cards.push(data);
-    newColumn.cardsOrder.push(data.id);
+    newColumn.cardsOrder?.push(data._id);
 
     onUpdateColumn(newColumn);
   };
@@ -145,7 +147,7 @@ export default function Column({
             <Container
               onDragStart={() => setStopScrollingY(true)}
               onDragEnd={() => setStopScrollingY(false)}
-              onDrop={(result) => onCardDrop(column.id, result)}
+              onDrop={(result) => onCardDrop(column._id, result)}
               groupName="column-body"
               getChildPayload={(index) => cards[index]}
               dragClass="card-ghost"
@@ -156,7 +158,10 @@ export default function Column({
                 className: "drop-preview",
               }}
             >
-              {cards && cards.map((card) => <Card card={card} key={card.id} />)}
+              {cards &&
+                cards.map((card: CardTypes) => (
+                  <Card card={card} key={card._id} />
+                ))}
             </Container>
           </div>
           <div className="column-footer flex w-full">

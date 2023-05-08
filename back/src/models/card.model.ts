@@ -1,19 +1,21 @@
 import Joi from "joi";
+import { ObjectId } from "mongodb";
 
 import { getDB } from "../config/mongodb";
 
-interface dataTypes {
-  boardId: string;
-  columnId: string;
+export interface CardDataTypes {
+  _id: ObjectId;
+  boardId: ObjectId;
+  columnId: ObjectId;
   title: string;
   desc?: string | null;
   cover?: string | null;
-  createdAt?: Date;
-  updatedAt?: Date | null;
+  createdAt?: number;
+  updatedAt?: number | null;
   _destroy?: boolean;
 }
 
-const collectionName = "cards";
+const cardCollectionName = "cards";
 const collectionSchema = Joi.object({
   boardId: Joi.string().required(),
   columnId: Joi.string().required(),
@@ -25,18 +27,25 @@ const collectionSchema = Joi.object({
   _destroy: Joi.boolean().default(false),
 });
 
-const validateSchema = async (data: dataTypes) => {
+const validateSchema = async (data: CardDataTypes) => {
   return await collectionSchema.validateAsync(data, { abortEarly: false });
 };
 
-const createNew = async (data: dataTypes) => {
+const createNew = async (data: CardDataTypes) => {
   try {
     const value = await validateSchema(data);
-    const result = await getDB().collection(collectionName).insertOne(value);
+    const validatedValue = {
+      ...value,
+      boardId: new ObjectId(value.boardId),
+      columnId: new ObjectId(value.columnId),
+    };
+    const result = await getDB()
+      .collection(cardCollectionName)
+      .insertOne(validatedValue);
     return result;
   } catch (error) {
     throw new Error(error as string);
   }
 };
 
-export const CardModel = { createNew };
+export const CardModel = { cardCollectionName, createNew };

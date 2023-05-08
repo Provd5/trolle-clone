@@ -14,6 +14,7 @@ export enum StatusCode {
   UNAUTHORIZED = 401,
   NOT_FOUND = 404,
   SERVER_ERROR = 500,
+  UNKNOWN_ERROR_MSG = "An unknown error occurred.",
 }
 
 connectDB()

@@ -63,10 +63,10 @@ export function AddItem({
 
     const titleToAdd = {
       id: Math.random().toString(36).substring(2, 5), // do zmiany gdy bedziemy mieli database
-      boardId: board.id,
+      boardId: board._id,
       title: newTitle.trim(),
       ...((column as ColumnTypes)
-        ? { columnId: column?.id, desc: "" }
+        ? { columnId: column?._id, desc: "" }
         : { cardsOrder: [], cards: [] }),
     };
 

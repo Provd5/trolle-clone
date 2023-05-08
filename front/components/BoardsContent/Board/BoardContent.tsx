@@ -16,7 +16,9 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
 
   const [board, setBoard] = useState<BoardTypes>(boardData);
   const [columns, setColumns] = useState<ColumnTypes[]>(
-    mapOrder(boardData.columns, boardData.columnsOrder)
+    boardData.columnsOrder
+      ? mapOrder(boardData.columns, boardData.columnsOrder)
+      : boardData.columns
   );
   const [allowDrag, setAllowDrag] = useState(true);
   const [stopScrollingX, setStopScrollingX] = useState(false);
@@ -26,7 +28,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   function newBoard(newColumns: ColumnTypes[]) {
     if (board) {
       let newBoard = { ...board };
-      newBoard.columnsOrder = newColumns.map((column) => column.id);
+      newBoard.columnsOrder = newColumns.map((column) => column._id);
       newBoard.columns = newColumns;
 
       setColumns(newColumns);
@@ -41,14 +43,14 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
     setColumns(newColumns);
   };
 
-  const onCardDrop = (columnId: ColumnTypes["id"], result: DropResult) => {
+  const onCardDrop = (column_Id: ColumnTypes["_id"], result: DropResult) => {
     if (result.addedIndex !== null || result.removedIndex !== null) {
       let newColumns = [...columns];
-      let currentColumn = newColumns.find((column) => column.id === columnId);
+      let currentColumn = newColumns.find((column) => column._id === column_Id);
 
       if (currentColumn) {
         currentColumn.cards = applyDrag(currentColumn.cards, result);
-        currentColumn.cardsOrder = currentColumn.cards.map((card) => card.id);
+        currentColumn.cardsOrder = currentColumn.cards.map((card) => card._id);
 
         setColumns(newColumns);
       }
@@ -67,7 +69,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   ) => {
     let newColumns = [...columns];
     const columnIndexToUpdate = newColumns.findIndex(
-      (index) => index.id === newColumnToUpdate.id
+      (index) => index._id === newColumnToUpdate._id
     );
 
     newColumnToUpdate._destroy
@@ -79,7 +81,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
 
   return (
     <div
-      className={`boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-1 pb-2 ${
+      className={`boardBodyScrollBar overflow-y-h_idden absolute inset-0 flex overflow-x-auto px-1 pb-2 ${
         stopScrollingX
           ? `snap-none scroll-auto`
           : `snap-x snap-mandatory scroll-smooth md:snap-none md:scroll-auto`
@@ -104,7 +106,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
         {columns &&
           columns.map((column: ColumnTypes) => (
             <Column
-              key={column.id}
+              key={column._id}
               column={column}
               onCardDrop={onCardDrop}
               setAllowDrag={setAllowDrag}
