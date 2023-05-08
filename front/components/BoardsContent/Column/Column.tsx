@@ -158,7 +158,10 @@ export default function Column({
                 className: "drop-preview",
               }}
             >
-              {cards && cards.map((card) => <Card card={card} key={card.id} />)}
+              {cards &&
+                cards.map((card: CardTypes) => (
+                  <Card card={card} key={card._id} />
+                ))}
             </Container>
           </div>
           <div className="column-footer flex w-full">

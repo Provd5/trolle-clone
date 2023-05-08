@@ -5,7 +5,8 @@ async function fetcher(
   id?: string,
   revalidateTime?: number
 ) {
-  if (!process.env.SERVER_HOSTNAME || !process.env.SERVER_PORT) return;
+  if (!process.env.SERVER_HOSTNAME || !process.env.SERVER_PORT)
+    return console.log("SERVER HOSTNAME or SERVER PORT not found");
 
   const res = await fetch(
     `http://${process.env.SERVER_HOSTNAME}:${
