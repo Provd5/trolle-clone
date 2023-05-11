@@ -56,21 +56,18 @@ export function AddItem({
   );
 
   const addNewItem = () => {
-    if (!newTitle) {
+    if (!(newTitle.trim().length > 0)) {
       textareaRef.current?.focus();
       return;
     }
 
-    const titleToAdd = {
-      id: Math.random().toString(36).substring(2, 5), // do zmiany gdy bedziemy mieli database
+    const itemToAdd = {
       boardId: board._id,
       title: newTitle.trim(),
-      ...((column as ColumnTypes)
-        ? { columnId: column?._id, desc: "" }
-        : { cardsOrder: [], cards: [] }),
+      ...(column && { columnId: column._id }),
     };
 
-    addItemFunction?.(titleToAdd);
+    addItemFunction?.(itemToAdd);
     setNewTitle("");
     if (textareaRef.current) {
       textareaRef.current.value = "";

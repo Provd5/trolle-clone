@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 dotenv.config();
+import cors from "cors";
 import express, { Express } from "express";
 
 import { connectDB } from "./config/mongodb";
@@ -7,6 +8,7 @@ import { v1Api } from "./routes/v1";
 
 const hostname = process.env.SERVER_HOSTNAME;
 const port = Number(process.env.SERVER_PORT);
+const corsOrigin = process.env.CORS_ORIGIN;
 
 export enum StatusCode {
   OK = 200,
@@ -30,7 +32,13 @@ const bootServer = () => {
     throw new Error("hostname and port must be specified");
   }
 
+  const corsOptions = {
+    origin: corsOrigin,
+    optionsSuccessStatus: 200,
+  };
+
   const app: Express = express();
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use("/v1", v1Api);
 
