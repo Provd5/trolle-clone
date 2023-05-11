@@ -15,6 +15,8 @@ import { BoardTypes, CardTypes, ColumnTypes } from "types/ContentDataStructure";
 
 import { useClickOutside } from "hooks/useClickOutside";
 import { useDragScroll } from "hooks/useDragScroll";
+import { postNewCard } from "services/postApi";
+import { updateColumn } from "services/putApi";
 import { adjustHeight } from "utils/adjustHeight";
 import { mapOrder } from "utils/mapOrder";
 
@@ -66,6 +68,7 @@ export default function Column({
   }, [toggleColumnTitleInput]);
 
   const addItemFunction = (data: CardTypes) => {
+    postNewCard(data);
     let newColumn = cloneDeep(column);
     newColumn.cards.push(data);
     newColumn.cardsOrder?.push(data._id);
@@ -75,9 +78,9 @@ export default function Column({
 
   const handleChangeTitle = (e: FocusEvent<HTMLTextAreaElement>) => {
     if (e.target.value !== columnTitle) {
-      e.target.value.length > 0
-        ? setColumnTitle(e.target.value)
-        : setColumnTitle("Bez nazwy");
+      e.target.value.trim().length > 0 &&
+        (updateColumn(column._id, { ...column, title: e.target.value }),
+        setColumnTitle(e.target.value));
       const newColumn = {
         ...column,
         title: columnTitle,
@@ -91,6 +94,7 @@ export default function Column({
       ...column,
       _destroy: true,
     };
+    updateColumn(newColumn._id, newColumn);
     onUpdateColumn(newColumn);
   };
 

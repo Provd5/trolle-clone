@@ -4,7 +4,7 @@ import { ObjectId, PushOperator } from "mongodb";
 import { getDB } from "../config/mongodb";
 
 export interface ColumnDataTypes {
-  _id: ObjectId;
+  _id?: ObjectId;
   boardId: ObjectId;
   title: string;
   cardsOrder?: string[];
@@ -60,11 +60,15 @@ const pushCardOrder = async (columnId: string, cardId: string) => {
 
 const update = async (id: ObjectId, data: ColumnDataTypes) => {
   try {
+    const updateData = {
+      ...data,
+      boardId: new ObjectId(data.boardId),
+    };
     const result = await getDB()
       .collection(columnCollectionName)
       .findOneAndUpdate(
         { _id: new ObjectId(id) },
-        { $set: data },
+        { $set: updateData },
         { returnDocument: "after" }
       );
     return result.value;

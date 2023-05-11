@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
 
 export interface CardDataTypes {
-  _id: ObjectId;
+  _id?: ObjectId;
   boardId: ObjectId;
   columnId: ObjectId;
   title: string;
@@ -48,4 +48,16 @@ const createNew = async (data: CardDataTypes) => {
   }
 };
 
-export const CardModel = { cardCollectionName, createNew };
+const deleteCards = async (ids: string[]) => {
+  try {
+    const transformIds = ids.map((id) => new ObjectId(id));
+    const result = await getDB()
+      .collection(cardCollectionName)
+      .updateMany({ _id: { $in: transformIds } }, { $set: { _destroy: true } });
+    return result;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export const CardModel = { cardCollectionName, createNew, deleteCards };

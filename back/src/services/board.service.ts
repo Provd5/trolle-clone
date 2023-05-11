@@ -1,6 +1,8 @@
+import { cloneDeep } from "lodash";
 import { ObjectId } from "mongodb";
 
 import { BoardDataTypes, BoardModel } from "../models/board.model";
+import { ColumnDataTypes } from "../models/column.model";
 
 const createNew = async (data: BoardDataTypes) => {
   try {
@@ -14,17 +16,22 @@ const createNew = async (data: BoardDataTypes) => {
 const getBoard = async (boardId: ObjectId) => {
   try {
     const board = await BoardModel.getBoard(boardId);
+    const transformBoard = cloneDeep(board);
+
+    transformBoard.columns = transformBoard.columns.filter(
+      (column: ColumnDataTypes) => !column._destroy
+    );
 
     // remove cards array from the board and add to columns array
-    board.columns?.forEach((column: { cards: []; _id: ObjectId }) => {
-      column.cards = board.cards?.filter(
+    transformBoard.columns?.forEach((column: { cards: []; _id: ObjectId }) => {
+      column.cards = transformBoard.cards?.filter(
         (card: { columnId: ObjectId }) =>
           card.columnId.toString() === column._id.toString()
       );
     });
-    delete board.cards;
+    delete transformBoard.cards;
 
-    return board;
+    return transformBoard;
   } catch (error) {
     throw new Error(error as string);
   }

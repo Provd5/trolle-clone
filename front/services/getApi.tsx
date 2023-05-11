@@ -1,17 +1,14 @@
 import { BoardTypes } from "types/ContentDataStructure";
 
-async function fetcher(
-  dataUrl: `/${string}`,
-  id?: string,
-  revalidateTime?: number
-) {
-  if (!process.env.SERVER_HOSTNAME || !process.env.SERVER_PORT)
+const hostname = process.env.SERVER_HOSTNAME;
+const port = process.env.SERVER_PORT;
+
+async function getData(url: `/${string}`, id: string, revalidateTime?: number) {
+  if (!hostname || !port)
     return console.log("SERVER HOSTNAME or SERVER PORT not found");
 
   const res = await fetch(
-    `http://${process.env.SERVER_HOSTNAME}:${
-      process.env.SERVER_PORT
-    }${dataUrl}${id ? `/${id}` : ""}`,
+    `http://${hostname}:${port}${url}/${id}`,
     revalidateTime
       ? { next: { revalidate: revalidateTime } }
       : { cache: "default" }
@@ -20,5 +17,5 @@ async function fetcher(
 }
 
 export async function getBoard(id: string): Promise<BoardTypes> {
-  return fetcher("/v1/boards", id);
+  return getData("/v1/boards", id);
 }
