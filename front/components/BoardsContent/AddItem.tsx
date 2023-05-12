@@ -18,7 +18,6 @@ import { adjustHeight } from "utils/adjustHeight";
 export function AddItem({
   title,
   placeholder,
-  isColumn = false,
   board,
   column,
   addItemFunction,
@@ -64,7 +63,7 @@ export function AddItem({
     const itemToAdd = {
       boardId: board._id,
       title: newTitle.trim(),
-      ...(column && { columnId: column._id }),
+      ...(column && { columnId: column?._id }),
     };
 
     addItemFunction?.(itemToAdd);
@@ -74,13 +73,13 @@ export function AddItem({
       textareaRef.current.focus();
       adjustHeight(textareaRef);
     }
-    if (isColumn) setToggleInput(false);
+    if (!column) setToggleInput(false);
   };
 
   return (
     <div
       className={`max-h-full rounded ${
-        isColumn
+        !column
           ? `w-64 bg-neutral-200/30 p-1 dark:bg-neutral-800/40 ${
               !toggleInput &&
               `hover:bg-neutral-200/40

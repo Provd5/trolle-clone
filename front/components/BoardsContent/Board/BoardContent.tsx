@@ -105,16 +105,19 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   const addItemFunction = (data: ColumnTypes) => {
     if (!board || !columns) return;
 
-    postNewColumn(data);
-    let newColumns = [...columns];
-    newColumns.push(data);
+    postNewColumn(data).then((result) => {
+      const insertedId = result.insertedId;
 
-    let newBoard = { ...board };
-    newBoard.columnsOrder = newColumns.map((column) => column._id);
-    newBoard.columns = newColumns;
+      let newColumns = [...columns];
+      newColumns.push({ ...data, _id: insertedId });
 
-    setColumns(newColumns);
-    setBoard(newBoard);
+      let newBoard = { ...board };
+      newBoard.columnsOrder = newColumns.map((column) => column._id);
+      newBoard.columns = newColumns;
+
+      setColumns(newColumns);
+      setBoard(newBoard);
+    });
   };
 
   const onUpdateColumn = (
@@ -181,7 +184,6 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
               <AddItem
                 title="Dodaj kolejną listę"
                 placeholder="Wpisz tytuł listy"
-                isColumn
                 board={board}
                 addItemFunction={addItemFunction}
               />

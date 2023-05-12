@@ -67,12 +67,15 @@ export default function Column({
   }, [toggleColumnTitleInput]);
 
   const addItemFunction = (data: CardTypes) => {
-    postNewCard(data);
-    let newColumn = { ...column };
-    newColumn.cards.push(data);
-    newColumn.cardsOrder?.push(data._id);
+    postNewCard(data).then((result) => {
+      const insertedId = result.insertedId;
 
-    onUpdateColumn(newColumn);
+      let newColumn = { ...column };
+      newColumn.cards.push({ ...data, _id: insertedId });
+      newColumn.cardsOrder?.push(data._id);
+
+      onUpdateColumn(newColumn);
+    });
   };
 
   const handleChangeTitle = (e: FocusEvent<HTMLTextAreaElement>) => {
