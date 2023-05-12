@@ -10,6 +10,7 @@
     "prettier"
   ],
   "rules": {
+    "no-html-link-for-pages": "off",
     "no-console": "warn",
     "unused-imports/no-unused-imports-ts": "error",
     "simple-import-sort/exports": "error",
