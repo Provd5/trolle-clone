@@ -18,7 +18,6 @@ import { adjustHeight } from "utils/adjustHeight";
 export function AddItem({
   title,
   placeholder,
-  isColumn = false,
   board,
   column,
   addItemFunction,
@@ -56,34 +55,31 @@ export function AddItem({
   );
 
   const addNewItem = () => {
-    if (!newTitle) {
+    if (!(newTitle.trim().length > 0)) {
       textareaRef.current?.focus();
       return;
     }
 
-    const titleToAdd = {
-      id: Math.random().toString(36).substring(2, 5), // do zmiany gdy bedziemy mieli database
-      boardId: board.id,
+    const itemToAdd = {
+      boardId: board._id,
       title: newTitle.trim(),
-      ...(column
-        ? { columnId: column.id, desc: "" }
-        : { cardsOrder: [], cards: [] }),
+      ...(column && { columnId: column?._id }),
     };
 
-    addItemFunction?.(titleToAdd);
+    addItemFunction?.(itemToAdd);
     setNewTitle("");
     if (textareaRef.current) {
       textareaRef.current.value = "";
       textareaRef.current.focus();
       adjustHeight(textareaRef);
     }
-    if (isColumn) setToggleInput(false);
+    if (!column) setToggleInput(false);
   };
 
   return (
     <div
       className={`max-h-full rounded ${
-        isColumn
+        !column
           ? `w-64 bg-neutral-200/30 p-1 dark:bg-neutral-800/40 ${
               !toggleInput &&
               `hover:bg-neutral-200/40

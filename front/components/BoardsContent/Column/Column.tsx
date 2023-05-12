@@ -3,7 +3,6 @@ import {
   FocusEvent,
   RefObject,
   SetStateAction,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -15,6 +14,8 @@ import { BoardTypes, CardTypes, ColumnTypes } from "types/ContentDataStructure";
 
 import { useClickOutside } from "hooks/useClickOutside";
 import { useDragScroll } from "hooks/useDragScroll";
+import { postNewCard } from "services/postApi";
+import { updateColumn } from "services/putApi";
 import { adjustHeight } from "utils/adjustHeight";
 import { mapOrder } from "utils/mapOrder";
 
@@ -31,7 +32,7 @@ export default function Column({
   onUpdateColumn,
 }: {
   column: ColumnTypes;
-  onCardDrop: (columnId: ColumnTypes["id"], result: DropResult) => void;
+  onCardDrop: (columnId: ColumnTypes["_id"], result: DropResult) => void;
   setAllowDrag: Dispatch<SetStateAction<boolean>>;
   board: BoardTypes;
   onUpdateColumn: (newColumnToUpdate: ColumnTypes) => void;
@@ -43,10 +44,11 @@ export default function Column({
   const [moreOptionsModal, setMoreOptionsModal] = useState(false);
   const [stopScrollingY, setStopScrollingY] = useState(false);
   const [toggleColumnTitleInput, setToggleColumnTitleInput] = useState(false);
-  const [thisColumn, setThisColumn] = useState(column);
   const [columnTitle, setColumnTitle] = useState(column.title);
 
-  const cards = mapOrder(column.cards, column.cardsOrder);
+  const cards = column.cardsOrder
+    ? mapOrder(column.cards, column.cardsOrder)
+    : column.cards;
 
   useDragScroll(scrollRef, stopScrollingY);
   useDragScroll(
@@ -64,22 +66,23 @@ export default function Column({
     }
   }, [toggleColumnTitleInput]);
 
-  const addItemFunction = useCallback(
-    (data: CardTypes) => {
-      let newColumn = { ...thisColumn };
-      newColumn.cards.push(data);
-      newColumn.cardsOrder.push(data.id);
+  const addItemFunction = (data: CardTypes) => {
+    postNewCard(data).then((result) => {
+      const insertedId = result.insertedId;
 
-      setThisColumn(newColumn);
-    },
-    [thisColumn]
-  );
+      let newColumn = { ...column };
+      newColumn.cards.push({ ...data, _id: insertedId });
+      newColumn.cardsOrder?.push(data._id);
+
+      onUpdateColumn(newColumn);
+    });
+  };
 
   const handleChangeTitle = (e: FocusEvent<HTMLTextAreaElement>) => {
     if (e.target.value !== columnTitle) {
-      e.target.value.length > 0
-        ? setColumnTitle(e.target.value)
-        : setColumnTitle("Bez nazwy");
+      e.target.value.trim().length > 0 &&
+        (updateColumn(column._id, { ...column, title: e.target.value }),
+        setColumnTitle(e.target.value));
       const newColumn = {
         ...column,
         title: columnTitle,
@@ -93,6 +96,7 @@ export default function Column({
       ...column,
       _destroy: true,
     };
+    updateColumn(newColumn._id, newColumn);
     onUpdateColumn(newColumn);
   };
 
@@ -149,7 +153,7 @@ export default function Column({
             <Container
               onDragStart={() => setStopScrollingY(true)}
               onDragEnd={() => setStopScrollingY(false)}
-              onDrop={(result) => onCardDrop(column.id, result)}
+              onDrop={(result) => onCardDrop(column._id, result)}
               groupName="column-body"
               getChildPayload={(index) => cards[index]}
               dragClass="card-ghost"
@@ -160,7 +164,10 @@ export default function Column({
                 className: "drop-preview",
               }}
             >
-              {cards && cards.map((card) => <Card card={card} key={card.id} />)}
+              {cards &&
+                cards.map((card: CardTypes) => (
+                  <Card card={card} key={card._id} />
+                ))}
             </Container>
           </div>
           <div className="column-footer flex w-full">

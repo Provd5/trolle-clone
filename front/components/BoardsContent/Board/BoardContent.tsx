@@ -1,9 +1,13 @@
-import React, { useRef, useState } from "react";
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
 import { Container, DropResult } from "react-smooth-dnd";
 
-import { BoardTypes, ColumnTypes } from "types/ContentDataStructure";
+import { BoardTypes, CardTypes, ColumnTypes } from "types/ContentDataStructure";
 
 import { useDragScroll } from "hooks/useDragScroll";
+import { postNewColumn } from "services/postApi";
+import { updateBoard, updateCard, updateColumn } from "services/putApi";
 import { applyDrag } from "utils/applyDrag";
 import { mapOrder } from "utils/mapOrder";
 
@@ -14,60 +18,116 @@ import Column from "../Column/Column";
 export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const [board, setBoard] = useState<BoardTypes>(boardData);
-  const [columns, setColumns] = useState<ColumnTypes[]>(
-    mapOrder(boardData.columns, boardData.columnsOrder)
-  );
+  const [board, setBoard] = useState<BoardTypes>();
+  const [columns, setColumns] = useState<ColumnTypes[]>();
+  const [loadedData, setLoadedData] = useState(false);
   const [allowDrag, setAllowDrag] = useState(true);
   const [stopScrollingX, setStopScrollingX] = useState(false);
 
   useDragScroll(scrollRef, stopScrollingX, allowDrag);
 
-  function newBoard(newColumns: ColumnTypes[]) {
-    if (board) {
-      let newBoard = { ...board };
-      newBoard.columnsOrder = newColumns.map((column) => column.id);
-      newBoard.columns = newColumns;
+  useEffect(() => {
+    setLoadedData(false);
+  }, [boardData]);
 
-      setColumns(newColumns);
-      setBoard(newBoard);
+  useEffect(() => {
+    if (!loadedData && boardData) {
+      setBoard(boardData),
+        boardData.columnsOrder
+          ? setColumns(mapOrder(boardData.columns, boardData.columnsOrder))
+          : setColumns(boardData.columns),
+        setLoadedData(true);
     }
+  }, [boardData, loadedData]);
+
+  function newBoard(newColumns: ColumnTypes[]) {
+    if (!board) return;
+
+    let newBoard = { ...board };
+    newBoard.columnsOrder = newColumns.map((column) => column._id);
+    newBoard.columns = newColumns;
+
+    setColumns(newColumns);
+    setBoard(newBoard);
   }
 
   const onColumnDrop = (result: DropResult) => {
+    if (!board || !columns) return;
+
     let newColumns = [...columns];
     newColumns = applyDrag(newColumns, result);
 
-    newBoard(newColumns);
+    let newBoard = { ...board };
+    newBoard.columnsOrder = newColumns.map((column) => column._id);
+    newBoard.columns = newColumns;
+
+    setColumns(newColumns);
+    setBoard(newBoard);
+    updateBoard(newBoard._id, { columnsOrder: newBoard.columnsOrder }).catch(
+      () => {
+        setColumns(columns);
+        setBoard(board);
+      }
+    );
   };
 
-  const onCardDrop = (columnId: ColumnTypes["id"], result: DropResult) => {
+  const onCardDrop = (column_Id: ColumnTypes["_id"], result: DropResult) => {
+    if (!columns) return;
+
     if (result.addedIndex !== null || result.removedIndex !== null) {
       let newColumns = [...columns];
-      let currentColumn = newColumns.find((column) => column.id === columnId);
+      let currentColumn = newColumns.find((column) => column._id === column_Id);
 
       if (currentColumn) {
         currentColumn.cards = applyDrag(currentColumn.cards, result);
-        currentColumn.cardsOrder = currentColumn.cards.map((card) => card.id);
+        currentColumn.cardsOrder = currentColumn.cards.map((card) => card._id);
 
         setColumns(newColumns);
+
+        if (result.removedIndex !== null && result.addedIndex !== null) {
+          // moving cards inside column
+          updateColumn(currentColumn._id, currentColumn).catch(() => {
+            setColumns(columns);
+          });
+        } else {
+          // moving cards between columns
+          if (result.addedIndex !== null) {
+            let currentCard: CardTypes = { ...result.payload };
+            currentCard.columnId = currentColumn._id;
+
+            updateCard(currentCard._id, currentCard);
+          }
+        }
       }
     }
   };
 
   const addItemFunction = (data: ColumnTypes) => {
-    let newColumns = [...columns];
-    newColumns.push(data);
+    if (!board || !columns) return;
 
-    newBoard(newColumns);
+    postNewColumn(data).then((result) => {
+      const insertedId = result.insertedId;
+
+      let newColumns = [...columns];
+      newColumns.push({ ...data, _id: insertedId });
+
+      let newBoard = { ...board };
+      newBoard.columnsOrder = newColumns.map((column) => column._id);
+      newBoard.columns = newColumns;
+
+      setColumns(newColumns);
+      setBoard(newBoard);
+    });
   };
 
   const onUpdateColumn = (
     newColumnToUpdate: ColumnTypes & { _destroy?: boolean }
   ) => {
+    if (!columns) return;
+
     let newColumns = [...columns];
     const columnIndexToUpdate = newColumns.findIndex(
-      (index) => index.id === newColumnToUpdate.id
+      (index) => index._id === newColumnToUpdate._id
     );
 
     newColumnToUpdate._destroy
@@ -79,55 +139,62 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
 
   return (
     <div
-      className={`boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-1 pb-2 ${
+      className={`boardBodyScrollBar overflow-y-h_idden absolute inset-0 flex overflow-x-auto px-1 pb-2 ${
         stopScrollingX
           ? `snap-none scroll-auto`
           : `snap-x snap-mandatory scroll-smooth md:snap-none md:scroll-auto`
       }`}
       ref={scrollRef}
     >
-      <Container
-        onDragStart={() => setStopScrollingX(true)}
-        onDragEnd={() => setStopScrollingX(false)}
-        orientation="horizontal"
-        onDrop={onColumnDrop}
-        dragHandleSelector=".column-drag-handle"
-        dragClass="card-ghost"
-        dropClass="card-ghost-drop"
-        dropPlaceholder={{
-          animationDuration: 150,
-          showOnTop: true,
-          className: "drop-preview",
-        }}
-        getChildPayload={(index) => columns[index]}
-      >
-        {columns &&
-          columns.map((column: ColumnTypes) => (
-            <Column
-              key={column.id}
-              column={column}
-              onCardDrop={onCardDrop}
-              setAllowDrag={setAllowDrag}
-              board={board}
-              onUpdateColumn={onUpdateColumn}
-            />
-          ))}
-      </Container>
-      <div className="column-wrapper">
-        <div
-          onMouseDown={() => setAllowDrag(false)}
-          onMouseUp={() => setAllowDrag(true)}
-          onMouseLeave={() => setAllowDrag(true)}
-        >
-          <AddItem
-            title="Dodaj kolejną listę"
-            placeholder="Wpisz tytuł listy"
-            isColumn
-            board={board}
-            addItemFunction={addItemFunction}
-          />
+      {loadedData && board && columns ? (
+        <>
+          <Container
+            onDragStart={() => setStopScrollingX(true)}
+            onDragEnd={() => setStopScrollingX(false)}
+            orientation="horizontal"
+            onDrop={onColumnDrop}
+            dragHandleSelector=".column-drag-handle"
+            dragClass="card-ghost"
+            dropClass="card-ghost-drop"
+            dropPlaceholder={{
+              animationDuration: 150,
+              showOnTop: true,
+              className: "drop-preview",
+            }}
+            getChildPayload={(index) => columns[index]}
+          >
+            {columns &&
+              columns.map((column: ColumnTypes) => (
+                <Column
+                  key={column._id}
+                  column={column}
+                  onCardDrop={onCardDrop}
+                  setAllowDrag={setAllowDrag}
+                  board={board}
+                  onUpdateColumn={onUpdateColumn}
+                />
+              ))}
+          </Container>
+          <div className="column-wrapper">
+            <div
+              onMouseDown={() => setAllowDrag(false)}
+              onMouseUp={() => setAllowDrag(true)}
+              onMouseLeave={() => setAllowDrag(true)}
+            >
+              <AddItem
+                title="Dodaj kolejną listę"
+                placeholder="Wpisz tytuł listy"
+                board={board}
+                addItemFunction={addItemFunction}
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="flex w-full justify-center p-5">
+          ⌛ Ładowanie kolumn...
         </div>
-      </div>
+      )}
     </div>
   );
 }
