@@ -1,12 +1,11 @@
-const hostname = process.env.SERVER_HOSTNAME;
-const port = process.env.SERVER_PORT;
+const hostname = process.env.SERVER_HOSTNAME_URL;
 
 async function postData(url: `/${string}`, data: any) {
-  // if (!hostname || !port)
-  //   return console.log("SERVER HOSTNAME or SERVER PORT not found");
+  // if (!hostname)
+  //   return console.log("SERVER HOSTNAME not found");
 
   const res = await fetch(
-    // `http://${hostname}:${port}${url}`,
+    // `${hostname}${url}`,
     `http://localhost:4000${url}`,
     {
       method: "POST",
