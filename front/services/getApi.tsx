@@ -17,5 +17,5 @@ async function getData(url: `/${string}`, id: string, revalidateTime?: number) {
 }
 
 export async function getBoard(id: string): Promise<BoardTypes> {
-  return getData("/v1/boards", id);
+  return getData("/v1/boards", id, 1);
 }
