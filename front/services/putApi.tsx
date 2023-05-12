@@ -4,18 +4,23 @@ async function putData(url: `/${string}`, id: string, data: any) {
   // if (!hostname)
   //   return console.log("SERVER HOSTNAME_URL not found");
 
-  const res = await fetch(
-    // `${hostname}${url}/${id}`,
-    `http://localhost:4000${url}/${id}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
-  return res.json();
+  try {
+    const res = await fetch(
+      // `${hostname}${url}/${id}`,
+      `http://localhost:4000${url}/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function updateBoard(id: string, data: any) {

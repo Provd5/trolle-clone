@@ -109,7 +109,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
       const insertedId = result.insertedId;
 
       let newColumns = [...columns];
-      newColumns.push({ ...data, _id: insertedId });
+      newColumns.push({ ...data, cards: [], _id: insertedId });
 
       let newBoard = { ...board };
       newBoard.columnsOrder = newColumns.map((column) => column._id);
