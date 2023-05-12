@@ -1,14 +1,12 @@
 import { BoardTypes } from "types/ContentDataStructure";
 
-const hostname = process.env.SERVER_HOSTNAME;
-const port = process.env.SERVER_PORT;
+const hostname = process.env.SERVER_HOSTNAME_URL;
 
 async function getData(url: `/${string}`, id: string, revalidateTime?: number) {
-  if (!hostname || !port)
-    return console.log("SERVER HOSTNAME or SERVER PORT not found");
+  if (!hostname) return console.log("SERVER HOSTNAME not found");
 
   const res = await fetch(
-    `http://${hostname}:${port}${url}/${id}`,
+    `${hostname}${url}/${id}`,
     revalidateTime
       ? { next: { revalidate: revalidateTime } }
       : { cache: "default" }

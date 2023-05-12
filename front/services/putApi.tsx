@@ -1,9 +1,11 @@
+const hostname = process.env.SERVER_HOSTNAME_URL;
+
 async function putData(url: `/${string}`, id: string, data: any) {
-  // if (!hostname || !port)
-  //   return console.log("SERVER HOSTNAME or SERVER PORT not found");
+  // if (!hostname)
+  //   return console.log("SERVER HOSTNAME_URL not found");
 
   const res = await fetch(
-    // `http://${hostname}:${port}${url}/${id}`,
+    // `${hostname}${url}/${id}`,
     `http://localhost:4000${url}/${id}`,
     {
       method: "PUT",
