@@ -6,7 +6,7 @@ import { CardModel } from "./card.model";
 import { ColumnModel } from "./column.model";
 
 export interface BoardDataTypes {
-  _id: ObjectId;
+  _id?: ObjectId;
   title: string;
   columnsOrder?: string[];
   createdAt?: number;
@@ -33,6 +33,7 @@ const createNew = async (data: BoardDataTypes) => {
     const result = await getDB()
       .collection(boardCollectionName)
       .insertOne(value);
+
     return result;
   } catch (error) {
     throw new Error(error as string);
@@ -48,6 +49,7 @@ const pushColumnOrder = async (boardId: string, columnId: string) => {
         { $push: { columnsOrder: columnId } as PushOperator<Document> },
         { returnDocument: "after" }
       );
+
     return result.value;
   } catch (error) {
     throw new Error(error as string);
@@ -85,4 +87,22 @@ const getBoard = async (boardId: ObjectId) => {
   }
 };
 
-export const BoardModel = { createNew, pushColumnOrder, getBoard };
+const update = async (id: ObjectId, data: BoardDataTypes) => {
+  try {
+    const updateData = { ...data };
+
+    const result = await getDB()
+      .collection(boardCollectionName)
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: updateData },
+        { returnDocument: "after" }
+      );
+
+    return result.value;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export const BoardModel = { createNew, pushColumnOrder, getBoard, update };

@@ -39,9 +39,11 @@ const createNew = async (data: CardDataTypes) => {
       boardId: new ObjectId(value.boardId),
       columnId: new ObjectId(value.columnId),
     };
+
     const result = await getDB()
       .collection(cardCollectionName)
       .insertOne(validatedValue);
+
     return result;
   } catch (error) {
     throw new Error(error as string);
@@ -54,10 +56,36 @@ const deleteCards = async (ids: string[]) => {
     const result = await getDB()
       .collection(cardCollectionName)
       .updateMany({ _id: { $in: transformIds } }, { $set: { _destroy: true } });
+
     return result;
   } catch (error) {
     throw new Error(error as string);
   }
 };
 
-export const CardModel = { cardCollectionName, createNew, deleteCards };
+const update = async (id: ObjectId, data: CardDataTypes) => {
+  try {
+    const updateData = { ...data };
+
+    if (data.boardId) {
+      updateData.boardId = new ObjectId(data.boardId);
+    }
+    if (data.columnId) {
+      updateData.columnId = new ObjectId(data.columnId);
+    }
+
+    const result = await getDB()
+      .collection(cardCollectionName)
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: updateData },
+        { returnDocument: "after" }
+      );
+
+    return result.value;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export const CardModel = { cardCollectionName, createNew, deleteCards, update };

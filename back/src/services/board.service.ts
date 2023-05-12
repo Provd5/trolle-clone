@@ -1,4 +1,3 @@
-import { cloneDeep } from "lodash";
 import { ObjectId } from "mongodb";
 
 import { BoardDataTypes, BoardModel } from "../models/board.model";
@@ -16,7 +15,7 @@ const createNew = async (data: BoardDataTypes) => {
 const getBoard = async (boardId: ObjectId) => {
   try {
     const board = await BoardModel.getBoard(boardId);
-    const transformBoard = cloneDeep(board);
+    const transformBoard = { ...board };
 
     transformBoard.columns = transformBoard.columns.filter(
       (column: ColumnDataTypes) => !column._destroy
@@ -37,4 +36,20 @@ const getBoard = async (boardId: ObjectId) => {
   }
 };
 
-export const BoardService = { createNew, getBoard };
+const update = async (
+  id: ObjectId,
+  data: ColumnDataTypes & { columns?: string[] }
+) => {
+  try {
+    const updateData = { ...data, updatedAt: Date.now() };
+    if (updateData._id) delete updateData._id;
+    if (updateData.columns) delete updateData.columns;
+    const result = await BoardModel.update(id, updateData);
+
+    return result;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export const BoardService = { createNew, getBoard, update };

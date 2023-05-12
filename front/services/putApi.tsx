@@ -16,6 +16,14 @@ async function putData(url: `/${string}`, id: string, data: any) {
   return res.json();
 }
 
+export async function updateBoard(id: string, data: any) {
+  return putData("/v1/boards", id, data);
+}
+
 export async function updateColumn(id: string, data: any) {
   return putData("/v1/columns", id, data);
+}
+
+export async function updateCard(id: string, data: any) {
+  return putData("/v1/cards", id, data);
 }

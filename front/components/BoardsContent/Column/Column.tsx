@@ -9,7 +9,6 @@ import {
 } from "react";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { Container, Draggable, DropResult } from "react-smooth-dnd";
-import { cloneDeep } from "lodash";
 
 import { BoardTypes, CardTypes, ColumnTypes } from "types/ContentDataStructure";
 
@@ -69,7 +68,7 @@ export default function Column({
 
   const addItemFunction = (data: CardTypes) => {
     postNewCard(data);
-    let newColumn = cloneDeep(column);
+    let newColumn = { ...column };
     newColumn.cards.push(data);
     newColumn.cardsOrder?.push(data._id);
 

@@ -34,9 +34,11 @@ const createNew = async (data: ColumnDataTypes) => {
       ...value,
       boardId: new ObjectId(value.boardId),
     };
+
     const result = await getDB()
       .collection(columnCollectionName)
       .insertOne(validatedValue);
+
     return result;
   } catch (error) {
     throw new Error(error as string);
@@ -52,6 +54,7 @@ const pushCardOrder = async (columnId: string, cardId: string) => {
         { $push: { cardsOrder: cardId } as PushOperator<Document> },
         { returnDocument: "after" }
       );
+
     return result.value;
   } catch (error) {
     throw new Error(error as string);
@@ -60,10 +63,12 @@ const pushCardOrder = async (columnId: string, cardId: string) => {
 
 const update = async (id: ObjectId, data: ColumnDataTypes) => {
   try {
-    const updateData = {
-      ...data,
-      boardId: new ObjectId(data.boardId),
-    };
+    const updateData = { ...data };
+
+    if (data.boardId) {
+      updateData.boardId = new ObjectId(data.boardId);
+    }
+
     const result = await getDB()
       .collection(columnCollectionName)
       .findOneAndUpdate(
@@ -71,6 +76,7 @@ const update = async (id: ObjectId, data: ColumnDataTypes) => {
         { $set: updateData },
         { returnDocument: "after" }
       );
+
     return result.value;
   } catch (error) {
     throw new Error(error as string);

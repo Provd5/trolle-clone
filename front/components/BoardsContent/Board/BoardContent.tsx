@@ -3,10 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Container, DropResult } from "react-smooth-dnd";
 
-import { BoardTypes, ColumnTypes } from "types/ContentDataStructure";
+import { BoardTypes, CardTypes, ColumnTypes } from "types/ContentDataStructure";
 
 import { useDragScroll } from "hooks/useDragScroll";
 import { postNewColumn } from "services/postApi";
+import { updateBoard, updateCard, updateColumn } from "services/putApi";
 import { applyDrag } from "utils/applyDrag";
 import { mapOrder } from "utils/mapOrder";
 
@@ -30,13 +31,13 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   }, [boardData]);
 
   useEffect(() => {
-    !loadedData &&
-      boardData &&
-      (setBoard(boardData),
-      boardData.columnsOrder
-        ? setColumns(mapOrder(boardData.columns, boardData.columnsOrder))
-        : setColumns(boardData.columns),
-      setLoadedData(true));
+    if (!loadedData && boardData) {
+      setBoard(boardData),
+        boardData.columnsOrder
+          ? setColumns(mapOrder(boardData.columns, boardData.columnsOrder))
+          : setColumns(boardData.columns),
+        setLoadedData(true);
+    }
   }, [boardData, loadedData]);
 
   function newBoard(newColumns: ColumnTypes[]) {
@@ -51,12 +52,23 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   }
 
   const onColumnDrop = (result: DropResult) => {
-    if (!columns) return;
+    if (!board || !columns) return;
 
     let newColumns = [...columns];
     newColumns = applyDrag(newColumns, result);
 
+    let newBoard = { ...board };
+    newBoard.columnsOrder = newColumns.map((column) => column._id);
+    newBoard.columns = newColumns;
+
     setColumns(newColumns);
+    setBoard(newBoard);
+    updateBoard(newBoard._id, { columnsOrder: newBoard.columnsOrder }).catch(
+      () => {
+        setColumns(columns);
+        setBoard(board);
+      }
+    );
   };
 
   const onCardDrop = (column_Id: ColumnTypes["_id"], result: DropResult) => {
@@ -71,6 +83,21 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
         currentColumn.cardsOrder = currentColumn.cards.map((card) => card._id);
 
         setColumns(newColumns);
+
+        if (result.removedIndex !== null && result.addedIndex !== null) {
+          // moving cards inside column
+          updateColumn(currentColumn._id, currentColumn).catch(() => {
+            setColumns(columns);
+          });
+        } else {
+          // moving cards between columns
+          if (result.addedIndex !== null) {
+            let currentCard: CardTypes = { ...result.payload };
+            currentCard.columnId = currentColumn._id;
+
+            updateCard(currentCard._id, currentCard);
+          }
+        }
       }
     }
   };
