@@ -47,6 +47,6 @@ const bootServer = () => {
   app.use("/v1", v1Api);
 
   app.listen(port || 4000, hostname || "localhost", () => {
-    console.log(`Server running at ${hostname}`);
+    console.log(`Server running at ${hostnameUrl}`);
   });
 };
