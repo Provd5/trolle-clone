@@ -1,5 +1,3 @@
-import { BoardTypes } from "types/ContentDataStructure";
-
 import { getBoard } from "services/getApi";
 
 import BoardContent from "components/BoardsContent/Board/BoardContent";
@@ -7,15 +5,7 @@ import BoardContent from "components/BoardsContent/Board/BoardContent";
 export default async function Home() {
   // "6449886520bf64da40c62240" "64497ebfafea212b0aeb4450" "645e4163b19891574a4b87ea" "645e41a9b19891574a4b87ed";
   const boardId = "64497ebfafea212b0aeb4450";
-  // const boardData = await getBoard(boardId);
-  let boardData: BoardTypes;
-  try {
-    await getBoard(boardId);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    boardData = await getBoard(boardId);
-  }
+  const boardData = await getBoard(boardId);
 
   return (
     <section className="h-full w-full overflow-hidden">

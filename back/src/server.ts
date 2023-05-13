@@ -46,10 +46,7 @@ const bootServer = () => {
   app.use(express.json());
   app.use("/v1", v1Api);
 
-  if (!port || !hostname) {
-    throw new Error("port must be specified");
-  }
-  app.listen(port, hostname, () => {
+  app.listen(port || 4000, hostname || "localhost", () => {
     console.log(`Server running at ${hostname}`);
   });
 };
