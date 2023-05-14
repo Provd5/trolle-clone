@@ -3,13 +3,12 @@
 import { useRef, useState } from "react";
 import { BiColumns } from "react-icons/bi";
 import { MdOutlineColorLens } from "react-icons/md";
-import Image from "next/image";
-import Link from "next/link";
 import FocusTrap from "focus-trap-react";
-import LogoImage from "public/android-chrome-512x512.png";
+import { motion } from "framer-motion";
 
 import { useClickOutside } from "hooks/useClickOutside";
 
+import Logo from "components/atoms/Logo";
 import BoardsModal from "components/Modals/BoardsModal";
 import ModeSwitcher from "components/Modals/ModeSwitcher";
 
@@ -33,14 +32,7 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
         <button onClick={() => toggleModal("BoardsModal")} className="btn-icon">
           <BiColumns className="icon" />
         </button>
-        <Link href={"/"} className="flex items-center gap-1">
-          <Image
-            alt="Projekt T.U.T.E.L Logo"
-            src={LogoImage}
-            className="h-6 w-6 md:h-8 md:w-8"
-          />
-          <h1 className="text-xl font-bold uppercase md:text-2xl">t.u.t.e.l</h1>
-        </Link>
+        <Logo />
         <button onClick={() => toggleModal("ColorsModal")} className="btn-icon">
           <MdOutlineColorLens className="icon" />
         </button>
@@ -52,14 +44,22 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
           <FocusTrap>
             <div ref={modalRef}>
               {activeModal === "ColorsModal" && (
-                <div className="modal right-0 top-0">
+                <motion.div
+                  className="modal right-0 top-0"
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                >
                   <ModeSwitcher />
-                </div>
+                </motion.div>
               )}
               {activeModal === "BoardsModal" && (
-                <div className="modal left-0 top-0">
+                <motion.div
+                  className="modal left-0 top-0"
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                >
                   <BoardsModal toggleModal={toggleModal} />
-                </div>
+                </motion.div>
               )}
               <button className="flex" onClick={() => toggleModal(null)} />
             </div>

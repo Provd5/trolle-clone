@@ -22,6 +22,7 @@ import { mapOrder } from "utils/mapOrder";
 import { AddItem } from "components/BoardsContent/AddItem";
 
 import Card from "../Card/Card";
+import ColumnWrapper from "./ColumnWrapper";
 import MoreOptionsModal from "./MoreOptionsModal";
 
 export default function Column({
@@ -81,8 +82,9 @@ export default function Column({
   const handleChangeTitle = (e: FocusEvent<HTMLTextAreaElement>) => {
     if (e.target.value !== columnTitle) {
       e.target.value.trim().length > 0 &&
-        (updateColumn(column._id, { ...column, title: e.target.value }),
-        setColumnTitle(e.target.value));
+        updateColumn(column._id, { ...column, title: e.target.value }).then(
+          () => setColumnTitle(e.target.value)
+        );
       const newColumn = {
         ...column,
         title: columnTitle,
@@ -102,7 +104,7 @@ export default function Column({
 
   return (
     <Draggable>
-      <div className="column-wrapper">
+      <ColumnWrapper>
         <div
           className="relative flex max-h-full w-72 flex-col rounded-lg bg-neutral-200 text-black dark:bg-neutral-800 dark:text-white"
           onMouseDown={() => setAllowDrag(false)}
@@ -180,7 +182,7 @@ export default function Column({
             />
           </div>
         </div>
-      </div>
+      </ColumnWrapper>
     </Draggable>
   );
 }

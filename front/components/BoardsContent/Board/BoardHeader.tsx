@@ -1,4 +1,5 @@
 import { FocusEvent, useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 import { BoardTypes } from "types/ContentDataStructure";
 
@@ -21,13 +22,15 @@ export default function BoardHeader({ boardData }: { boardData: BoardTypes }) {
   const handleChangeTitle = (e: FocusEvent<HTMLInputElement>) => {
     if (e.target.value !== boardTitle) {
       e.target.value.trim().length > 0 &&
-        (updateBoard(boardData._id, { ...boardData, title: e.target.value }),
-        setBoardTitle(e.target.value));
+        updateBoard(boardData._id, {
+          ...boardData,
+          title: e.target.value,
+        }).then(() => setBoardTitle(e.target.value));
     }
   };
 
   return (
-    <div>
+    <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
       {editTitle ? (
         <input
           className="w-40 text-2xl text-black dark:text-white"
@@ -50,6 +53,6 @@ export default function BoardHeader({ boardData }: { boardData: BoardTypes }) {
       <div className="flex items-center gap-0.5 text-sm">
         Utworzona: {dataFormater(boardData.createdAt)}
       </div>
-    </div>
+    </motion.div>
   );
 }

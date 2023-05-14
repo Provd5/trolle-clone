@@ -1,4 +1,4 @@
-import Loader from "components/Loader";
+import Loader from "components/atoms/Loader";
 
 export default async function Card({ params }: { params: { cardId: string } }) {
   //   const boardData = await getBoard(params.id.toString());

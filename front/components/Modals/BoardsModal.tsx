@@ -7,7 +7,7 @@ import { BoardTypes } from "types/ContentDataStructure";
 
 import { dataFormater } from "utils/dataFormater";
 
-import Loader from "components/Loader";
+import Loader from "components/atoms/Loader";
 import { ModalsType } from "components/Navbar/Navbar";
 
 export default function BoardsModal({
@@ -15,18 +15,18 @@ export default function BoardsModal({
 }: {
   toggleModal: (modalName: ModalsType) => void;
 }) {
+  const [isError, setIsError] = useState(false);
   const [boardDataState, setBoardDataState] = useState<BoardTypes[]>();
 
   useEffect(() => {
     fetch("http://localhost:4000/v1/boards")
       .then((res) => res.json())
-      .then((data) => {
-        setBoardDataState(data);
-      });
+      .then((data) => setBoardDataState(data))
+      .catch(() => setIsError(true));
   }, []);
 
   return (
-    <div className="flex max-h-[75vh] min-w-[200px] flex-col gap-1 text-current-1">
+    <div className="flex max-h-[75vh] w-52 flex-col gap-1 text-current-1">
       <div className="mb-1 flex justify-center font-bold">Twoje tablice:</div>
       <div className="flex flex-col gap-1 overflow-auto">
         {boardDataState ? (
@@ -48,7 +48,7 @@ export default function BoardsModal({
             </Link>
           ))
         ) : (
-          <Loader loadingText="⏳ Ładowanie..." />
+          <Loader loadingText="⏳ Ładowanie..." error={isError} />
         )}
       </div>
       {window.location.pathname !== "/" && (

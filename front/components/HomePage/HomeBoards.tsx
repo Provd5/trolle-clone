@@ -7,24 +7,24 @@ import { BoardTypes } from "types/ContentDataStructure";
 
 import { dataFormater } from "utils/dataFormater";
 
-import Loader from "components/Loader";
+import Loader from "components/atoms/Loader";
 
 export default function HomeBoards() {
+  const [isError, setIsError] = useState(false);
   const [boardsData, setBoardData] = useState<BoardTypes[]>();
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_SERVER_HOSTNAME_URL}/v1/boards`)
       .then((res) => res.json())
-      .then((data) => {
-        setBoardData(data);
-      });
+      .then((data) => setBoardData(data))
+      .catch(() => setIsError(true));
   }, []);
 
   return (
     <>
       <p className="flex w-full items-center p-3 font-bold">Twoje tablice:</p>
       {!boardsData ? (
-        <Loader loadingText="⏳ Ładowanie..." />
+        <Loader loadingText="⏳ Ładowanie..." error={isError} />
       ) : !(boardsData.length > 0) ? (
         <Loader loadingText="Brak tablic" />
       ) : (
