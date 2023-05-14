@@ -19,6 +19,16 @@ const createNew = async (data: CardDataTypes) => {
   }
 };
 
+const getCard = async (_id: ObjectId) => {
+  try {
+    const card = await CardModel.getCard(_id);
+
+    return card;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
 const update = async (
   id: ObjectId,
   data: CardDataTypes & { columns?: string[] }
@@ -34,4 +44,4 @@ const update = async (
   }
 };
 
-export const CardService = { createNew, update };
+export const CardService = { createNew, getCard, update };

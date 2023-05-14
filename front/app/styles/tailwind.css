@@ -28,14 +28,8 @@
   .border-default {
     @apply border-neutral-300/20;
   }
-  .bg-gradient {
-    @apply bg-gradient-to-bl from-current-1 to-current-2;
-  }
-  .gradient-dir-1 {
-    @apply bg-gradient bg-gradient-to-b;
-  }
-  .gradient-dir-2 {
-    @apply bg-gradient bg-gradient-to-tr;
+  .bg-current-gradient {
+    background-image: var(--current-gradient);
   }
   .drop-preview {
     @apply m-1 border border-dashed border-black/50 bg-white/30;
@@ -45,5 +39,8 @@
   }
   .dropdown-item {
     @apply w-full cursor-pointer border-b border-neutral-300/50 p-3 hover:bg-neutral-200/50 dark:border-neutral-700/50 hover:dark:bg-neutral-800/50;
+  }
+  .modal {
+    @apply border-default absolute z-50 mx-1 my-1 min-w-[100px] rounded border bg-white p-2 text-black shadow-lg md:mx-3;
   }
 }

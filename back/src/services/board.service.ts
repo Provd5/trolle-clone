@@ -36,6 +36,20 @@ const getBoard = async (boardId: ObjectId) => {
   }
 };
 
+const getBoardsArray = async () => {
+  try {
+    const boards = await BoardModel.getBoardsArray();
+    const transformBoards = [...boards];
+    transformBoards.map((board) => {
+      delete board.columnsOrder;
+    });
+
+    return transformBoards;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
 const update = async (
   id: ObjectId,
   data: ColumnDataTypes & { columns?: string[] }
@@ -52,4 +66,4 @@ const update = async (
   }
 };
 
-export const BoardService = { createNew, getBoard, update };
+export const BoardService = { createNew, getBoard, getBoardsArray, update };

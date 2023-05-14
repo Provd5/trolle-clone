@@ -87,6 +87,19 @@ const getBoard = async (boardId: ObjectId) => {
   }
 };
 
+const getBoardsArray = async () => {
+  try {
+    const result = await getDB()
+      .collection(boardCollectionName)
+      .aggregate([{ $match: { _destroy: false } }])
+      .toArray();
+
+    return result || {};
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
 const update = async (id: ObjectId, data: BoardDataTypes) => {
   try {
     const updateData = { ...data };
@@ -105,4 +118,10 @@ const update = async (id: ObjectId, data: BoardDataTypes) => {
   }
 };
 
-export const BoardModel = { createNew, pushColumnOrder, getBoard, update };
+export const BoardModel = {
+  createNew,
+  pushColumnOrder,
+  getBoard,
+  getBoardsArray,
+  update,
+};

@@ -1,13 +1,18 @@
 import { BoardTypes } from "types/ContentDataStructure";
 
-const hostname = process.env.SERVER_HOSTNAME_URL;
+const hostname = process.env.NEXT_PUBLIC_SERVER_HOSTNAME_URL;
 
-async function getData(url: `/${string}`, id: string, revalidateTime?: number) {
+async function getData(
+  url: `/${string}`,
+  id: string | null,
+  revalidateTime?: number
+) {
   if (!hostname) return console.log("SERVER HOSTNAME not found");
+  const urlString = id ? `${hostname}${url}/${id}` : `${hostname}${url}`;
 
   try {
     const res = await fetch(
-      `${hostname}${url}/${id}`,
+      urlString,
       revalidateTime
         ? { next: { revalidate: revalidateTime } }
         : { cache: "default" }
@@ -19,6 +24,10 @@ async function getData(url: `/${string}`, id: string, revalidateTime?: number) {
   }
 }
 
+export async function getBoardsArray(): Promise<BoardTypes[]> {
+  return getData("/v1/boards", null);
+}
+
 export async function getBoard(id: string): Promise<BoardTypes> {
-  return getData("/v1/boards", id, 1);
+  return getData("/v1/boards", id);
 }

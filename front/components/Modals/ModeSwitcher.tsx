@@ -3,15 +3,10 @@
 import { useEffect, useState } from "react";
 
 const Colors = [
-  "light",
-  "dark",
-  "rose",
-  "fuchsia",
-  "blue",
-  "cyan",
-  "green",
-  "lime",
-  "amber",
+  { color: "light", emoji: "🌫️" },
+  { color: "dark", emoji: "🦇" },
+  { color: "blue", emoji: "☄️" },
+  { color: "green", emoji: "🌊" },
 ] as const;
 
 type ColorType = (typeof Colors)[number];
@@ -27,7 +22,7 @@ export default function ModeSwitcher() {
     setIsModeLoaded(true);
   }, []);
 
-  function changeMode(color: ColorType) {
+  function changeMode(color: ColorType["color"]) {
     document.documentElement.className = color;
     window.localStorage.setItem("mode", color);
   }
@@ -35,16 +30,18 @@ export default function ModeSwitcher() {
   return (
     <>
       {isModeLoaded && (
-        <div className="grid grid-cols-3 gap-1">
-          {Colors.map((color) => (
+        <div className="grid grid-cols-2 gap-1">
+          {Colors.map((item) => (
             <button
-              key={color}
-              onClick={() => changeMode(color)}
-              className="h-10 w-10 rounded hover:opacity-75 md:h-16 md:w-16"
+              key={item.color}
+              onClick={() => changeMode(item.color)}
+              className="flex h-10 w-10 items-center justify-center rounded p-1 hover:opacity-75 md:h-16 md:w-16 md:items-end md:justify-end"
               style={{
-                background: `linear-gradient(45deg, rgb(var(--${color}-1)), rgb(var(--${color}-2)))`,
+                background: `var(--${item.color}-gradient)`,
               }}
-            />
+            >
+              {item.emoji}
+            </button>
           ))}
         </div>
       )}

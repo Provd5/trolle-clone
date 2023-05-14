@@ -39,32 +39,32 @@ export default function Column({
 }) {
   const modalRef = useRef<HTMLDivElement>(null);
   const columnTitleInputRef = useRef<HTMLTextAreaElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLButtonElement | HTMLDivElement>(null);
 
   const [moreOptionsModal, setMoreOptionsModal] = useState(false);
   const [stopScrollingY, setStopScrollingY] = useState(false);
-  const [toggleColumnTitleInput, setToggleColumnTitleInput] = useState(false);
+  const [editTitle, setEditTitle] = useState(false);
   const [columnTitle, setColumnTitle] = useState(column.title);
 
   const cards = column.cardsOrder
     ? mapOrder(column.cards, column.cardsOrder)
     : column.cards;
 
-  useDragScroll(scrollRef, stopScrollingY);
+  useDragScroll(scrollRef as RefObject<HTMLDivElement>, stopScrollingY);
   useDragScroll(
     columnTitleInputRef as unknown as RefObject<HTMLDivElement>,
     stopScrollingY
   );
   useClickOutside(modalRef, setMoreOptionsModal, false);
-  useClickOutside(columnTitleInputRef, setToggleColumnTitleInput, false, true);
+  useClickOutside(columnTitleInputRef, setEditTitle, false, true);
 
   useEffect(() => {
-    if (toggleColumnTitleInput) {
+    if (editTitle) {
       adjustHeight(columnTitleInputRef);
       columnTitleInputRef.current?.focus();
       columnTitleInputRef.current?.select();
     }
-  }, [toggleColumnTitleInput]);
+  }, [editTitle]);
 
   const addItemFunction = (data: CardTypes) => {
     postNewCard(data).then((result) => {
@@ -104,20 +104,20 @@ export default function Column({
     <Draggable>
       <div className="column-wrapper">
         <div
-          className="relative flex max-h-full w-72 flex-col rounded bg-neutral-200 text-black dark:bg-neutral-800 dark:text-white"
+          className="relative flex max-h-full w-72 flex-col rounded-lg bg-neutral-200 text-black dark:bg-neutral-800 dark:text-white"
           onMouseDown={() => setAllowDrag(false)}
           onMouseUp={() => setAllowDrag(true)}
           onMouseLeave={() => setAllowDrag(true)}
         >
           <div className="column-header flex max-w-full items-start gap-1 p-1">
-            {!toggleColumnTitleInput ? (
-              <div
-                className="columnBodyScrollBar column-drag-handle max-h-[160px] w-full cursor-grab overflow-y-auto rounded-md p-2"
-                ref={scrollRef}
-                onClick={() => setToggleColumnTitleInput(true)}
+            {!editTitle ? (
+              <button
+                className="columnBodyScrollBar column-drag-handle max-h-[160px] w-full cursor-grab overflow-y-auto rounded-md p-2 text-left"
+                ref={scrollRef as RefObject<HTMLButtonElement>}
+                onClick={() => setEditTitle(true)}
               >
                 <h1 className="overflow-anywhere font-bold">{columnTitle}</h1>
-              </div>
+              </button>
             ) : (
               <textarea
                 className="max-h-[160px] w-full resize-none rounded-md p-2"
@@ -128,7 +128,7 @@ export default function Column({
                 onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
                 onBlur={(e) => {
                   handleChangeTitle(e);
-                  setToggleColumnTitleInput(false);
+                  setEditTitle(false);
                 }}
               />
             )}
@@ -148,7 +148,7 @@ export default function Column({
           </div>
           <div
             className="column-body columnBodyScrollBar mx-1 overflow-y-auto overflow-x-hidden px-1"
-            ref={scrollRef}
+            ref={scrollRef as RefObject<HTMLDivElement>}
           >
             <Container
               onDragStart={() => setStopScrollingY(true)}

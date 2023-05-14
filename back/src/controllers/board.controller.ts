@@ -35,6 +35,21 @@ const getBoard = async (req: Request, res: Response) => {
   }
 };
 
+const getBoardsArray = async (req: Request, res: Response) => {
+  try {
+    const result = await BoardService.getBoardsArray();
+    res.status(StatusCode.OK).json(result);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(StatusCode.SERVER_ERROR).json({ error: error.message });
+    } else {
+      res
+        .status(StatusCode.SERVER_ERROR)
+        .json({ error: StatusCode.UNKNOWN_ERROR_MSG });
+    }
+  }
+};
+
 const update = async (req: Request, res: Response) => {
   try {
     const { id } = req.params as unknown as { id: ObjectId };
@@ -51,4 +66,4 @@ const update = async (req: Request, res: Response) => {
   }
 };
 
-export const BoardController = { createNew, getBoard, update };
+export const BoardController = { createNew, getBoard, getBoardsArray, update };

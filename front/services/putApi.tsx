@@ -1,21 +1,16 @@
-const hostname = process.env.SERVER_HOSTNAME_URL;
+const hostname = process.env.NEXT_PUBLIC_SERVER_HOSTNAME_URL;
 
 async function putData(url: `/${string}`, id: string, data: any) {
-  // if (!hostname)
-  //   return console.log("SERVER HOSTNAME_URL not found");
+  if (!hostname) return console.log("SERVER HOSTNAME_URL not found");
 
   try {
-    const res = await fetch(
-      // `${hostname}${url}/${id}`,
-      `http://localhost:4000${url}/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
+    const res = await fetch(`${hostname}${url}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
     return res.json();
   } catch (error) {

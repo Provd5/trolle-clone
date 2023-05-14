@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import { Container, DropResult } from "react-smooth-dnd";
 
@@ -12,6 +10,7 @@ import { applyDrag } from "utils/applyDrag";
 import { mapOrder } from "utils/mapOrder";
 
 import { AddItem } from "components/BoardsContent/AddItem";
+import Loader from "components/Loader";
 
 import Column from "../Column/Column";
 
@@ -27,18 +26,16 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   useDragScroll(scrollRef, stopScrollingX, allowDrag);
 
   useEffect(() => {
-    setLoadedData(false);
+    setBoard(boardData),
+      boardData.columnsOrder
+        ? setColumns(mapOrder(boardData.columns, boardData.columnsOrder))
+        : setColumns(boardData.columns),
+      setLoadedData(true);
   }, [boardData]);
 
   useEffect(() => {
-    if (!loadedData && boardData) {
-      setBoard(boardData),
-        boardData.columnsOrder
-          ? setColumns(mapOrder(boardData.columns, boardData.columnsOrder))
-          : setColumns(boardData.columns),
-        setLoadedData(true);
-    }
-  }, [boardData, loadedData]);
+    setLoadedData(false);
+  }, []);
 
   function newBoard(newColumns: ColumnTypes[]) {
     if (!board) return;
@@ -53,6 +50,8 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
 
   const onColumnDrop = (result: DropResult) => {
     if (!board || !columns) return;
+    const { removedIndex, addedIndex } = result;
+    if (removedIndex === null && addedIndex === null) return;
 
     let newColumns = [...columns];
     newColumns = applyDrag(newColumns, result);
@@ -139,7 +138,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
 
   return (
     <div
-      className={`boardBodyScrollBar overflow-y-h_idden absolute inset-0 flex overflow-x-auto px-1 pb-2 ${
+      className={`boardBodyScrollBar overflow-y-h_idden absolute inset-0 flex overflow-x-auto px-3 pb-2 ${
         stopScrollingX
           ? `snap-none scroll-auto`
           : `snap-x snap-mandatory scroll-smooth md:snap-none md:scroll-auto`
@@ -191,9 +190,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
           </div>
         </>
       ) : (
-        <div className="flex w-full justify-center p-5">
-          ⌛ Ładowanie kolumn...
-        </div>
+        <Loader loadingText="⏳ Ładowanie kolumn..." />
       )}
     </div>
   );
