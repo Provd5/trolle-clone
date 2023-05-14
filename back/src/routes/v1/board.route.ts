@@ -5,7 +5,10 @@ import { BoardValidation } from "../../validations/board.validation";
 
 const router = express.Router();
 
-router.route("/").post(BoardValidation.createNew, BoardController.createNew);
+router
+  .route("/")
+  .get(BoardController.getBoardsArray)
+  .post(BoardValidation.createNew, BoardController.createNew);
 
 router
   .route("/:id")

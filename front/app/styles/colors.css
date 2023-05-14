@@ -1,23 +1,24 @@
 :root {
   /* in rgb */
-  --light-1: 121 128 134;
-  --light-2: 135 142 146;
-  --dark-1: 57 57 70;
-  --dark-2: 69 71 84;
-  --rose-1: 173 31 42;
-  --rose-2: 195 34 61;
-  --fuchsia-1: 138 40 138;
-  --fuchsia-2: 149 46 158;
-  --blue-1: 32 112 223;
-  --blue-2: 54 140 226;
-  --cyan-1: 4 113 149;
-  --cyan-2: 4 146 174;
-  --green-1: 19 134 57;
-  --green-2: 22 156 45;
-  --lime-1: 77 134 19;
-  --lime-2: 123 156 22;
-  --amber-1: 179 84 25;
-  --amber-2: 201 100 29;
+  --light-1: 121 133 156;
+  --light-2: 147 159 184;
+  --light-gradient: linear-gradient(
+    185deg,
+    rgb(117, 127, 154),
+    rgb(215, 221, 232)
+  );
+
+  --dark-1: 60 60 60;
+  --dark-2: 49 49 49;
+  --dark-gradient: linear-gradient(-15deg, rgb(46, 48, 49), rgb(65, 67, 69));
+
+  --blue-1: 42 111 160;
+  --blue-2: 50 136 194;
+  --blue-gradient: linear-gradient(5deg, rgb(44, 62, 80), rgb(41, 128, 185));
+
+  --green-1: 104 172 120;
+  --green-2: 73 151 133;
+  --green-gradient: linear-gradient(0deg, rgb(19, 78, 94), rgb(113, 178, 128));
 }
 
 html,
@@ -25,37 +26,21 @@ html.light {
   color-scheme: light;
   --current-1: var(--light-1);
   --current-2: var(--light-2);
+  --current-gradient: var(--light-gradient);
 }
 html.dark {
   color-scheme: dark;
   --current-1: var(--dark-1);
   --current-2: var(--dark-2);
-}
-html.rose {
-  --current-1: var(--rose-1);
-  --current-2: var(--rose-2);
-}
-html.fuchsia {
-  --current-1: var(--fuchsia-1);
-  --current-2: var(--fuchsia-2);
+  --current-gradient: var(--dark-gradient);
 }
 html.blue {
   --current-1: var(--blue-1);
   --current-2: var(--blue-2);
-}
-html.cyan {
-  --current-1: var(--cyan-1);
-  --current-2: var(--cyan-2);
+  --current-gradient: var(--blue-gradient);
 }
 html.green {
   --current-1: var(--green-1);
   --current-2: var(--green-2);
-}
-html.lime {
-  --current-1: var(--lime-1);
-  --current-2: var(--lime-2);
-}
-html.amber {
-  --current-1: var(--amber-1);
-  --current-2: var(--amber-2);
+  --current-gradient: var(--green-gradient);
 }

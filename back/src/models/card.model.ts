@@ -9,6 +9,7 @@ export interface CardDataTypes {
   columnId: ObjectId;
   title: string;
   desc?: string | null;
+  cover?: string | null;
   createdAt?: number;
   updatedAt?: number | null;
   _destroy?: boolean;
@@ -20,6 +21,7 @@ const collectionSchema = Joi.object({
   columnId: Joi.string().required(),
   title: Joi.string().required().min(1).max(255).trim(),
   desc: Joi.string().default(null),
+  cover: Joi.string().default(null),
   createdAt: Joi.date().timestamp().default(Date.now()),
   updatedAt: Joi.date().timestamp().default(null),
   _destroy: Joi.boolean().default(false),
@@ -61,6 +63,19 @@ const deleteCards = async (ids: string[]) => {
   }
 };
 
+const getCard = async (_id: ObjectId) => {
+  try {
+    const result = await getDB()
+      .collection(cardCollectionName)
+      .aggregate([{ $match: { _id: new ObjectId(_id), _destroy: false } }])
+      .toArray();
+
+    return result[0] || {};
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
 const update = async (id: ObjectId, data: CardDataTypes) => {
   try {
     const updateData = { ...data };
@@ -86,4 +101,10 @@ const update = async (id: ObjectId, data: CardDataTypes) => {
   }
 };
 
-export const CardModel = { cardCollectionName, createNew, deleteCards, update };
+export const CardModel = {
+  cardCollectionName,
+  createNew,
+  deleteCards,
+  getCard,
+  update,
+};

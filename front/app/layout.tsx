@@ -1,8 +1,8 @@
+import { Suspense } from "react";
 import { Poppins } from "next/font/google";
 import clsx from "clsx";
 
-import Navbar from "components/Navbars/Navbar";
-import Sidebar from "components/Navbars/Sidebar";
+import Navbar from "components/Navbar/Navbar";
 
 import "./styles/tailwind.css";
 import "./styles/globals.css";
@@ -10,6 +10,7 @@ import "./styles/colors.css";
 import "./styles/scrollbars.css";
 
 import DefaultHeadTags from "./DefaultHeadTags";
+import Loading from "./loading";
 
 const poppinsFont = Poppins({
   weight: ["300", "400", "600", "700"],
@@ -27,7 +28,7 @@ export const metadata = {
   description: "Projekt T.U.T.E.L",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -46,8 +47,13 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: modeInitializerScript }} />
         <div className="relative flex h-full flex-col">
           <Navbar>
-            <Sidebar />
-            {children}
+            <Suspense fallback={<Loading />}>
+              <section className="h-full w-full overflow-hidden">
+                <div className="bg-current-gradient relative flex h-full flex-col">
+                  {children}
+                </div>
+              </section>
+            </Suspense>
           </Navbar>
         </div>
       </body>
