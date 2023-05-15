@@ -1,5 +1,5 @@
-import Board from "components/BoardsContent/Board/Board";
 import Loader from "components/atoms/Loader";
+import Board from "components/BoardsContent/Board/Board";
 
 export default async function BoardPage({
   params,

@@ -21,7 +21,7 @@ export default function Board({ boardId }: { boardId: string }) {
 
   return boardData ? (
     <>
-      <div className="flex h-[54px] items-center justify-between bg-current-2 px-3 md:h-[64px] md:px-5">
+      <div className="md:h-[64px] flex h-[54px] items-center justify-between bg-current-2 px-3 md:px-5">
         <BoardHeader boardData={boardData} />
       </div>
       <div className="relative my-2 h-full select-none">

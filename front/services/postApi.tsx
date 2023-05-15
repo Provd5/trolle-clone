@@ -18,6 +18,10 @@ async function postData(url: `/${string}`, data: any) {
   }
 }
 
+export async function postNewBoard(data: any) {
+  return postData("/v1/boards", data);
+}
+
 export async function postNewColumn(data: any) {
   return postData("/v1/columns", data);
 }

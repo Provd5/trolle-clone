@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { MdDateRange, MdOutlineSubtitles } from "react-icons/md";
+import { MdDateRange, MdOutlineSubtitles, MdUpdate } from "react-icons/md";
 import Link from "next/link";
 
 import { BoardTypes } from "types/ContentDataStructure";
@@ -36,7 +36,7 @@ export default function BoardsModal({
               key={boardData._id}
               onClick={() => toggleModal(null)}
             >
-              <div className="rounded bg-current-1 px-2 py-3 text-sm text-white hover:bg-current-1/80">
+              <div className="hover:bg-current-1/80 rounded bg-current-1 px-2 py-3 text-sm text-white">
                 <div className="flex items-center gap-0.5">
                   <MdOutlineSubtitles /> Nazwa:{" "}
                   <span className="font-bold">{boardData.title}</span>
@@ -44,6 +44,13 @@ export default function BoardsModal({
                 <div className="flex items-center gap-0.5">
                   <MdDateRange /> Utworzona: {dataFormater(boardData.createdAt)}
                 </div>
+                {boardData.updatedAt && (
+                  <div className="flex items-center gap-0.5">
+                    <MdUpdate /> Zmodyfikowana:
+                    <br />
+                    {dataFormater(boardData.updatedAt, true)}
+                  </div>
+                )}
               </div>
             </Link>
           ))
@@ -55,7 +62,7 @@ export default function BoardsModal({
         <Link
           href={"/"}
           onClick={() => toggleModal(null)}
-          className="flex items-center gap-0.5 rounded p-2 hover:bg-neutral-300/70"
+          className="hover:bg-neutral-300/70 flex items-center gap-0.5 rounded p-2"
         >
           <AiOutlinePlus />
           Stwórz tablicę
