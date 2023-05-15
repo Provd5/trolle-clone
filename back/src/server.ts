@@ -6,7 +6,6 @@ import { connectDB } from "./config/mongodb";
 import { v1Api } from "./routes/v1";
 
 dotenv.config();
-const hostname = process.env.SERVER_HOSTNAME;
 const port = Number(process.env.SERVER_PORT);
 const corsOrigin = process.env.CORS_ORIGIN;
 
@@ -42,7 +41,7 @@ const bootServer = () => {
   app.use(express.json());
   app.use("/v1", v1Api);
 
-  app.listen(port || 4000, hostname || "localhost", () => {
+  app.listen(port || 4000, () => {
     console.log("Server running");
   });
 };
