@@ -1,5 +1,5 @@
+import Loader from "components/atoms/Loader";
 import Board from "components/BoardsContent/Board/Board";
-import Loader from "components/Loader";
 
 export default async function BoardPage({
   params,
@@ -10,7 +10,7 @@ export default async function BoardPage({
 
   return (
     <>
-      {!boardId || !(Object.keys(boardId).length > 0) ? (
+      {!boardId ? (
         <Loader
           loadingText="😞 Problem z załadowaniem tablicy, sprawdź czy dana tablica na pewno
          istnieje."

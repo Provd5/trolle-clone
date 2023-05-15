@@ -9,10 +9,11 @@ import { updateBoard, updateCard, updateColumn } from "services/putApi";
 import { applyDrag } from "utils/applyDrag";
 import { mapOrder } from "utils/mapOrder";
 
+import Loader from "components/atoms/Loader";
 import { AddItem } from "components/BoardsContent/AddItem";
-import Loader from "components/Loader";
 
 import Column from "../Column/Column";
+import ColumnWrapper from "../Column/ColumnWrapper";
 
 export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -138,7 +139,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
 
   return (
     <div
-      className={`boardBodyScrollBar overflow-y-h_idden absolute inset-0 flex overflow-x-auto px-3 pb-2 ${
+      className={`boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-3 pb-2 ${
         stopScrollingX
           ? `snap-none scroll-auto`
           : `snap-x snap-mandatory scroll-smooth md:snap-none md:scroll-auto`
@@ -174,7 +175,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
                 />
               ))}
           </Container>
-          <div className="column-wrapper">
+          <ColumnWrapper>
             <div
               onMouseDown={() => setAllowDrag(false)}
               onMouseUp={() => setAllowDrag(true)}
@@ -187,7 +188,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
                 addItemFunction={addItemFunction}
               />
             </div>
-          </div>
+          </ColumnWrapper>
         </>
       ) : (
         <Loader loadingText="⏳ Ładowanie kolumn..." />

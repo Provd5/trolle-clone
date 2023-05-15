@@ -29,9 +29,6 @@ connectDB()
   });
 
 const bootServer = () => {
-  if (!hostnameUrl) {
-    throw new Error("hostnameUrl must be specified");
-  }
   if (!corsOrigin) {
     throw new Error("corsOrigin must be specified");
   }
@@ -47,6 +44,6 @@ const bootServer = () => {
   app.use("/v1", v1Api);
 
   app.listen(port || 4000, hostname || "localhost", () => {
-    console.log(`Server running at ${hostnameUrl}`);
+    console.log(`Server running${hostnameUrl && ` at ${hostnameUrl}`}`);
   });
 };

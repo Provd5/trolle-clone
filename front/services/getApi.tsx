@@ -1,4 +1,4 @@
-import { BoardTypes } from "types/ContentDataStructure";
+import { BoardTypes, CardTypes } from "types/ContentDataStructure";
 
 const hostname = process.env.NEXT_PUBLIC_SERVER_HOSTNAME_URL;
 
@@ -30,4 +30,8 @@ export async function getBoardsArray(): Promise<BoardTypes[]> {
 
 export async function getBoard(id: string): Promise<BoardTypes> {
   return getData("/v1/boards", id);
+}
+
+export async function getCard(id: string): Promise<CardTypes> {
+  return getData("/v1/cards", id);
 }
