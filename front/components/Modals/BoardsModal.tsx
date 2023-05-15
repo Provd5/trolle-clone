@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { BoardTypes } from "types/ContentDataStructure";
 
-import { dataFormater } from "utils/dataFormater";
+import { dateFormater } from "utils/dateFormater";
 
 import Loader from "components/atoms/Loader";
 import { ModalsType } from "components/Navbar/Navbar";
@@ -26,10 +26,10 @@ export default function BoardsModal({
   }, []);
 
   return (
-    <div className="flex max-h-[75vh] w-52 flex-col gap-1 text-current-1">
+    <div className="flex max-h-[75vh] w-60 flex-col gap-1 text-current-1">
       <Link
         href={"/"}
-        className="mb-1 flex justify-center font-bold"
+        className="mb-1 flex justify-center p-1 font-bold"
         onClick={() => toggleModal(null)}
       >
         Twoje tablice:
@@ -42,21 +42,27 @@ export default function BoardsModal({
               key={boardData._id}
               onClick={() => toggleModal(null)}
             >
-              <div className="hover:bg-current-1/80 rounded bg-current-1 px-2 py-3 text-sm text-white">
-                <div className="flex items-center gap-0.5">
-                  <MdOutlineSubtitles /> Nazwa:{" "}
-                  <span className="max-h-[50px] overflow-hidden font-bold">
+              <div className="mx-1 rounded bg-current-1 px-1 py-3 text-md text-white hover:bg-current-1/80">
+                <div className="flex flex-wrap items-center gap-x-0.5">
+                  <MdOutlineSubtitles />{" "}
+                  <span className="font-bold">Nazwa:</span>{" "}
+                  <span className="max-h-[52px] overflow-hidden">
                     {boardData.title}
                   </span>
                 </div>
-                <div className="flex items-center gap-0.5">
-                  <MdDateRange /> Utworzona: {dataFormater(boardData.createdAt)}
+                <div className="flex flex-wrap items-center gap-x-0.5">
+                  <MdDateRange /> <span className="font-bold">Utworzona:</span>
+                  <span className="whitespace-nowrap">
+                    {dateFormater(boardData.createdAt)}
+                  </span>
                 </div>
                 {boardData.updatedAt && (
-                  <div className="flex items-center gap-0.5">
-                    <MdUpdate /> Zmodyfikowana:
-                    <br />
-                    {dataFormater(boardData.updatedAt, true)}
+                  <div className="flex flex-wrap items-center gap-x-0.5">
+                    <MdUpdate />{" "}
+                    <span className="font-bold">Zmodyfikowana:</span>
+                    <span className="whitespace-nowrap">
+                      {dateFormater(boardData.updatedAt)}
+                    </span>
                   </div>
                 )}
               </div>
@@ -70,7 +76,7 @@ export default function BoardsModal({
         <Link
           href={"/"}
           onClick={() => toggleModal(null)}
-          className="hover:bg-neutral-300/70 flex items-center gap-0.5 rounded p-2"
+          className="flex items-center gap-0.5 rounded p-2 hover:bg-neutral-300/70"
         >
           <AiOutlinePlus />
           Stwórz tablicę

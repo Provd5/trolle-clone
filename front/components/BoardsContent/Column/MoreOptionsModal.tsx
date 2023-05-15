@@ -16,7 +16,7 @@ export default function MoreOptionsModal({
     <FocusTrap>
       <div
         ref={modalRef}
-        className={` absolute top-[40px] right-[-20px] z-50 flex w-[200px] flex-col items-start justify-center rounded border border-neutral-400/50 bg-neutral-100 shadow-lg dark:bg-neutral-900`}
+        className={` absolute right-[-20px] top-[40px] z-50 flex w-[200px] flex-col items-start justify-center rounded border border-neutral-400/50 bg-neutral-100 shadow-lg dark:bg-neutral-900`}
       >
         <button className="dropdown-item">
           <div className="text-start">
@@ -47,7 +47,6 @@ export default function MoreOptionsModal({
                 <button
                   className="btn-default bg-neutral-400 text-white hover:bg-neutral-400/80"
                   onClick={() => setOpenConfirmModal(false)}
-                  tabIndex={1}
                 >
                   <div>Anuluj</div>
                 </button>

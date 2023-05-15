@@ -20,7 +20,6 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
 
   const [board, setBoard] = useState<BoardTypes>();
   const [columns, setColumns] = useState<ColumnTypes[]>();
-  const [loadedData, setLoadedData] = useState(false);
   const [allowDrag, setAllowDrag] = useState(true);
   const [stopScrollingX, setStopScrollingX] = useState(false);
 
@@ -30,13 +29,8 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
     setBoard(boardData),
       boardData.columnsOrder
         ? setColumns(mapOrder(boardData.columns, boardData.columnsOrder))
-        : setColumns(boardData.columns),
-      setLoadedData(true);
+        : setColumns(boardData.columns);
   }, [boardData]);
-
-  useEffect(() => {
-    setLoadedData(false);
-  }, []);
 
   function newBoard(newColumns: ColumnTypes[]) {
     if (!board) return;
@@ -146,7 +140,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
       }`}
       ref={scrollRef}
     >
-      {loadedData && board && columns ? (
+      {board && columns ? (
         <>
           <Container
             onDragStart={() => setStopScrollingX(true)}

@@ -1,11 +1,11 @@
 import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 
-export function dataFormater(date: number, minutes?: boolean) {
+export function dateFormater(date: number, noHours?: boolean) {
   {
     const formatedDate = format(
       date,
-      minutes ? "yyyy-MM-dd HH:mm" : "yyyy-MM-dd",
+      noHours ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm",
       {
         locale: pl,
       }

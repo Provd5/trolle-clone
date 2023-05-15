@@ -38,8 +38,6 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
         </button>
       </nav>
       <main className="relative flex grow flex-col md:flex-row">
-        {children}
-
         {activeModal && (
           <FocusTrap>
             <div ref={modalRef}>
@@ -65,6 +63,7 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
             </div>
           </FocusTrap>
         )}
+        {children}
       </main>
     </>
   );

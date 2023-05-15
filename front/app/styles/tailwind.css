@@ -14,10 +14,10 @@
 
 @layer components {
   .btn-icon {
-    @apply hover:bg-neutral-300/50 dark:hover:bg-neutral-50/30 md:h-[36px] md:w-[36px] flex h-[28px] w-[28px] flex-none items-center justify-center rounded-md;
+    @apply flex h-[32px] w-[32px] flex-none items-center justify-center rounded-md hover:bg-neutral-300/50 dark:hover:bg-neutral-50/30 md:h-[36px] md:w-[36px];
   }
   .btn-default {
-    @apply md:px-[16px] md:py-[9px] flex items-center justify-center rounded-md px-[8px] py-[5px];
+    @apply flex items-center justify-center rounded-md px-[13px] py-[7px] md:px-[16px] md:py-[9px];
   }
   .icon {
     @apply h-[60%] w-[60%];
@@ -41,7 +41,7 @@
     @apply mx-1 inline-block h-full snap-center snap-normal;
   }
   .dropdown-item {
-    @apply hover:bg-neutral-200/50 dark:border-neutral-700/50 hover:dark:bg-neutral-800/50 w-full cursor-pointer border-b border-neutral-300/50 p-3;
+    @apply w-full cursor-pointer border-b border-neutral-300/50 p-3 hover:bg-neutral-200/50 dark:border-neutral-700/50 hover:dark:bg-neutral-800/50;
   }
   .modal {
     @apply border-default absolute z-50 mx-1 my-1 min-w-[100px] rounded border bg-white p-2 text-black shadow-lg md:mx-3;

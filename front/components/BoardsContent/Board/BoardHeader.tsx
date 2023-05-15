@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { BoardTypes } from "types/ContentDataStructure";
 
 import { updateBoard } from "services/putApi";
-import { dataFormater } from "utils/dataFormater";
+import { dateFormater } from "utils/dateFormater";
 
 export default function BoardHeader({ boardData }: { boardData: BoardTypes }) {
   const editTitleRef = useRef<HTMLInputElement>(null);
@@ -51,7 +51,7 @@ export default function BoardHeader({ boardData }: { boardData: BoardTypes }) {
         </button>
       )}
       <div className="flex items-center gap-0.5 text-sm">
-        Utworzona: {dataFormater(boardData.createdAt)}
+        Utworzona: {dateFormater(boardData.createdAt)}
       </div>
     </motion.div>
   );

@@ -5,6 +5,7 @@ module.exports = {
   theme: {
     fontSize: {
       sm: ["12px", "16px"],
+      md: ["13px", "17px"],
       base: ["14px", "18px"],
       xl: ["16px", "20px"],
       "2xl": ["18px", "22px"],
@@ -21,6 +22,9 @@ module.exports = {
         error: "rgb(var(--error) / <alpha-value>)",
         "current-1": "rgb(var(--current-1) / <alpha-value>)",
         "current-2": "rgb(var(--current-2) / <alpha-value>)",
+      },
+      screens: {
+        xs: "480px",
       },
     },
   },

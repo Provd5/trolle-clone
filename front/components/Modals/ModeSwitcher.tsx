@@ -28,7 +28,7 @@ export default function ModeSwitcher() {
   }
 
   return (
-    <>
+    <div>
       {isModeLoaded && (
         <div className="grid grid-cols-2 gap-1">
           {Colors.map((item) => (
@@ -45,6 +45,6 @@ export default function ModeSwitcher() {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }

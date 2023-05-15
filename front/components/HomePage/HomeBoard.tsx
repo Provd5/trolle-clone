@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { BoardTypes } from "types/ContentDataStructure";
 
 import { updateBoard } from "services/putApi";
-import { dataFormater } from "utils/dataFormater";
+import { dateFormater } from "utils/dateFormater";
 
 export default function HomeBoard({
   board,
@@ -34,31 +34,30 @@ export default function HomeBoard({
     >
       {!toggleDelete ? (
         <Link href={board._id}>
-          <div className="flex h-44 w-52 flex-col justify-between rounded-lg bg-current-2 p-3 drop-shadow-lg transition-transform hover:scale-110">
+          <div className="mx-auto flex h-44 w-10/12 flex-col justify-between overflow-hidden rounded-lg bg-current-2 p-3 drop-shadow-lg transition-transform hover:scale-105 xs:w-7/12 sm:w-60">
             <p className="max-h-[80px] overflow-hidden font-bold">
               {board.title}
             </p>
             <div className="flex justify-between text-right">
               <div className="flex items-end">
-                <MdDelete
-                  className="btn-icon h-7 w-7"
+                <button
                   onClick={(e) => {
                     setToggleDelete(true);
                     e.preventDefault();
                   }}
-                />
+                >
+                  <MdDelete className="btn-icon h-7 w-7" />
+                </button>
               </div>
               <div>
                 <div>
                   <p className="text-sm font-bold">Utworzona:</p>
-                  <p className="text-sm">{dataFormater(board.createdAt)}</p>
+                  <p className="text-sm">{dateFormater(board.createdAt)}</p>
                 </div>
                 {board.updatedAt && (
                   <div>
                     <p className="text-sm font-bold">Ostatnia zmiana:</p>
-                    <p className="text-sm">
-                      {dataFormater(board.updatedAt, true)}
-                    </p>
+                    <p className="text-sm">{dateFormater(board.updatedAt)}</p>
                   </div>
                 )}
               </div>
@@ -66,22 +65,27 @@ export default function HomeBoard({
           </div>
         </Link>
       ) : (
-        <div className="flex h-44 w-52 flex-col items-center justify-around rounded-lg bg-current-2 p-3 drop-shadow-lg transition-transform">
-          <p>
+        <div className="mx-auto flex h-44 w-10/12 flex-col items-center justify-center overflow-hidden rounded-lg bg-current-2 p-3 drop-shadow-lg transition-transform xs:w-7/12 sm:w-60">
+          <p className="px-3 pb-5">
             Jesteś pewien, że chcesz <span className="font-bold">usunąć</span>{" "}
-            tablicę <span className="font-bold">{board.title}</span>?
+            tablicę{" "}
+            <span className="font-bold">
+              {board.title.length < 25
+                ? board.title
+                : `${board.title.substring(0, 25)}...`}
+            </span>
+            ?
           </p>
           <div className="flex gap-5">
             <button
-              className="btn-default hover:bg-error/80 bg-error text-white focus:bg-error"
+              className="btn-default bg-error text-white hover:bg-error/80 focus:bg-error"
               onClick={() => handleDeleteBoard()}
             >
               Usuń
             </button>
             <button
-              className="btn-default hover:bg-neutral-400/80 bg-neutral-400 text-white"
+              className="btn-default bg-neutral-400 text-white hover:bg-neutral-400/80"
               onClick={() => setToggleDelete(false)}
-              tabIndex={1}
             >
               <div>Anuluj</div>
             </button>
