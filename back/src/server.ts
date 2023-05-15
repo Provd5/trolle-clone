@@ -1,13 +1,12 @@
-import * as dotenv from "dotenv";
-dotenv.config();
 import cors from "cors";
+import * as dotenv from "dotenv";
 import express, { Express } from "express";
 
 import { connectDB } from "./config/mongodb";
 import { v1Api } from "./routes/v1";
 
+dotenv.config();
 const hostname = process.env.SERVER_HOSTNAME;
-const hostnameUrl = process.env.SERVER_HOSTNAME_URL;
 const port = Number(process.env.SERVER_PORT);
 const corsOrigin = process.env.CORS_ORIGIN;
 
@@ -44,6 +43,6 @@ const bootServer = () => {
   app.use("/v1", v1Api);
 
   app.listen(port || 4000, hostname || "localhost", () => {
-    console.log(`Server running${hostnameUrl && ` at ${hostnameUrl}`}`);
+    console.log("Server running");
   });
 };
