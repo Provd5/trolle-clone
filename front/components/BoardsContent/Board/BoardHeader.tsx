@@ -44,7 +44,7 @@ export default function BoardHeader({ boardData }: { boardData: BoardTypes }) {
         ></input>
       ) : (
         <button
-          className="text-2xl font-bold first-letter:uppercase"
+          className="whitespace-nowrap text-2xl font-bold first-letter:uppercase"
           onClick={() => setEditTitle(true)}
         >
           {boardTitle}
