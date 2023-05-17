@@ -1,4 +1,4 @@
-import Loader from "components/atoms/Loader";
+import { Loader } from "components/atoms/Loader";
 import SingleCardPage from "components/BoardsContent/Card/SingleCardPage";
 
 export default async function CardPage({
@@ -12,8 +12,9 @@ export default async function CardPage({
     <>
       {!cardId ? (
         <Loader
-          loadingText="😞 Problem z załadowaniem tablicy, sprawdź czy dana tablica na pewno
+          errorText="😞 Problem z załadowaniem karty, sprawdź czy dana karta na pewno
          istnieje."
+          error
         />
       ) : (
         <SingleCardPage cardId={cardId} />

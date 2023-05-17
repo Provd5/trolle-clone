@@ -19,24 +19,24 @@ import { updateColumn } from "services/putApi";
 import { adjustHeight } from "utils/adjustHeight";
 import { mapOrder } from "utils/mapOrder";
 
+import { ButtonIcon } from "components/atoms/ButtonIcon";
 import { AddItem } from "components/BoardsContent/AddItem";
 
 import Card from "../Card/Card";
-import ColumnWrapper from "./ColumnWrapper";
 import MoreOptionsModal from "./MoreOptionsModal";
 
 export default function Column({
-  column,
-  onCardDrop,
-  setAllowDrag,
   board,
+  column,
+  setAllowDrag,
   onUpdateColumn,
+  onCardDrop,
 }: {
-  column: ColumnTypes;
-  onCardDrop: (columnId: ColumnTypes["_id"], result: DropResult) => void;
-  setAllowDrag: Dispatch<SetStateAction<boolean>>;
   board: BoardTypes;
+  column: ColumnTypes;
+  setAllowDrag: Dispatch<SetStateAction<boolean>>;
   onUpdateColumn: (newColumnToUpdate: ColumnTypes) => void;
+  onCardDrop: (columnId: ColumnTypes["_id"], result: DropResult) => void;
 }) {
   const modalRef = useRef<HTMLDivElement>(null);
   const columnTitleInputRef = useRef<HTMLTextAreaElement>(null);
@@ -47,7 +47,7 @@ export default function Column({
   const [editTitle, setEditTitle] = useState(false);
   const [columnTitle, setColumnTitle] = useState(column.title);
 
-  const cards = column.cardsOrder
+  const cards: CardTypes[] = column.cardsOrder
     ? mapOrder(column.cards, column.cardsOrder)
     : column.cards;
 
@@ -104,7 +104,7 @@ export default function Column({
 
   return (
     <Draggable>
-      <ColumnWrapper>
+      <div className="column-wrapper">
         <div
           className="relative flex max-h-full w-72 flex-col rounded-lg bg-neutral-200 text-black dark:bg-neutral-800 dark:text-white"
           onMouseDown={() => setAllowDrag(false)}
@@ -114,7 +114,7 @@ export default function Column({
           <div className="column-header flex max-w-full items-start gap-1 p-1">
             {!editTitle ? (
               <button
-                className="columnBodyScrollBar column-drag-handle max-h-[160px] w-full cursor-grab overflow-y-auto rounded-md p-2 text-left"
+                className="verticalScrollBar column-drag-handle max-h-[160px] w-full cursor-grab overflow-y-auto rounded-md p-2 text-left"
                 ref={scrollRef as RefObject<HTMLButtonElement>}
                 onClick={() => setEditTitle(true)}
               >
@@ -132,24 +132,25 @@ export default function Column({
                   handleChangeTitle(e);
                   setEditTitle(false);
                 }}
+                maxLength={255}
               />
             )}
-            <button
-              className="btn-icon"
+            <ButtonIcon
+              color="none"
+              Icon={BiDotsHorizontalRounded}
+              iconSize="icon"
+              restClassNames="defaultHover"
               onClick={() => setMoreOptionsModal(true)}
-            >
-              <BiDotsHorizontalRounded className="icon" />
-            </button>
+            />
             {moreOptionsModal && (
               <MoreOptionsModal
                 modalRef={modalRef}
                 handleDeleteColumn={handleDeleteColumn}
-                setMoreOptionsModal={setMoreOptionsModal}
               />
             )}
           </div>
           <div
-            className="column-body columnBodyScrollBar mx-1 overflow-y-auto overflow-x-hidden px-1"
+            className="column-body verticalScrollBar mx-1 overflow-y-auto overflow-x-hidden px-1"
             ref={scrollRef as RefObject<HTMLDivElement>}
           >
             <Container
@@ -182,7 +183,7 @@ export default function Column({
             />
           </div>
         </div>
-      </ColumnWrapper>
+      </div>
     </Draggable>
   );
 }

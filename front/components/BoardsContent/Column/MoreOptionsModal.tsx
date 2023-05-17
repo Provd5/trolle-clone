@@ -1,14 +1,15 @@
-import React, { Dispatch, RefObject, SetStateAction, useState } from "react";
+import React, { RefObject, useState } from "react";
+import { MdDelete } from "react-icons/md";
 import FocusTrap from "focus-trap-react";
+
+import { Button } from "components/atoms/Button";
 
 export default function MoreOptionsModal({
   modalRef,
   handleDeleteColumn,
-  setMoreOptionsModal,
 }: {
   modalRef: RefObject<HTMLDivElement>;
   handleDeleteColumn: () => void;
-  setMoreOptionsModal: Dispatch<SetStateAction<boolean>>;
 }) {
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
@@ -28,7 +29,9 @@ export default function MoreOptionsModal({
             className="dropdown-item"
             onClick={() => setOpenConfirmModal(true)}
           >
-            <div className="text-start">Usuń listę</div>
+            <div className="flex items-center gap-1 text-start">
+              <MdDelete className="text-error" /> Usuń listę
+            </div>
           </button>
         ) : (
           <FocusTrap>
@@ -38,18 +41,15 @@ export default function MoreOptionsModal({
                 listę razem z jej zawartością?
               </div>
               <div className="flex justify-between px-1">
-                <button
-                  className="btn-default bg-error text-white hover:bg-error/80 focus:bg-error"
-                  onClick={handleDeleteColumn}
-                >
-                  <div>Usuń</div>
-                </button>
-                <button
-                  className="btn-default bg-neutral-400 text-white hover:bg-neutral-400/80"
+                <Button color="errorColor" onClick={handleDeleteColumn}>
+                  Usuń
+                </Button>
+                <Button
+                  color="grayColor"
                   onClick={() => setOpenConfirmModal(false)}
                 >
-                  <div>Anuluj</div>
-                </button>
+                  Anuluj
+                </Button>
               </div>
             </div>
           </FocusTrap>

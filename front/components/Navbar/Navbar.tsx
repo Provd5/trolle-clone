@@ -8,7 +8,8 @@ import { motion } from "framer-motion";
 
 import { useClickOutside } from "hooks/useClickOutside";
 
-import Logo from "components/atoms/Logo";
+import { ButtonIcon } from "components/atoms/ButtonIcon";
+import { Logo } from "components/atoms/Logo";
 import BoardsModal from "components/Modals/BoardsModal";
 import ModeSwitcher from "components/Modals/ModeSwitcher";
 
@@ -29,13 +30,19 @@ export default function Navbar({ children }: { children: React.ReactNode }) {
   return (
     <>
       <nav className="flex flex-wrap items-center justify-between bg-current-1 px-1 py-0.5 md:px-2 md:py-1">
-        <button onClick={() => toggleModal("BoardsModal")} className="btn-icon">
-          <BiColumns className="icon" />
-        </button>
+        <ButtonIcon
+          color="defaultColor"
+          Icon={BiColumns}
+          iconSize="icon"
+          onClick={() => toggleModal("BoardsModal")}
+        />
         <Logo />
-        <button onClick={() => toggleModal("ColorsModal")} className="btn-icon">
-          <MdOutlineColorLens className="icon" />
-        </button>
+        <ButtonIcon
+          color="defaultColor"
+          Icon={MdOutlineColorLens}
+          iconSize="icon"
+          onClick={() => toggleModal("ColorsModal")}
+        />
       </nav>
       <main className="relative flex grow flex-col md:flex-row">
         {activeModal && (

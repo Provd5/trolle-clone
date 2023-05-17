@@ -20,6 +20,7 @@ module.exports = {
         white: "rgb(var(--white) / <alpha-value>)",
         black: "rgb(var(--black) / <alpha-value>)",
         error: "rgb(var(--error) / <alpha-value>)",
+        errorDark: "rgb(var(--errorDark) / <alpha-value>)",
         "current-1": "rgb(var(--current-1) / <alpha-value>)",
         "current-2": "rgb(var(--current-2) / <alpha-value>)",
       },
