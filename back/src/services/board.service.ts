@@ -18,14 +18,14 @@ const getBoard = async (boardId: ObjectId) => {
     const transformBoard = { ...board };
 
     transformBoard.columns = transformBoard.columns.filter(
-      (column: ColumnDataTypes) => !column._destroy
+      (column: { _destroy: boolean }) => !column._destroy
     );
 
     // remove cards array from the board and add to columns array
     transformBoard.columns?.forEach((column: { cards: []; _id: ObjectId }) => {
       column.cards = transformBoard.cards?.filter(
-        (card: { columnId: ObjectId }) =>
-          card.columnId.toString() === column._id.toString()
+        (card: { columnId: ObjectId; _destroy: boolean }) =>
+          card.columnId.toString() === column._id.toString() && !card._destroy
       );
     });
     delete transformBoard.cards;

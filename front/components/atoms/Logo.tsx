@@ -1,8 +1,9 @@
+import type { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import LogoImage from "public/android-chrome-512x512.png";
 
-export default function Logo() {
+export const Logo: FC = () => {
   return (
     <Link
       href={"/"}
@@ -16,4 +17,4 @@ export default function Logo() {
       <h1 className="text-xl font-bold uppercase md:text-2xl">t.u.t.e.l</h1>
     </Link>
   );
-}
+};

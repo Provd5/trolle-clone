@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Container, DropResult } from "react-smooth-dnd";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { BoardTypes, CardTypes, ColumnTypes } from "types/ContentDataStructure";
 
@@ -9,11 +10,10 @@ import { updateBoard, updateCard, updateColumn } from "services/putApi";
 import { applyDrag } from "utils/applyDrag";
 import { mapOrder } from "utils/mapOrder";
 
-import Loader from "components/atoms/Loader";
+import { Loader } from "components/atoms/Loader";
 import { AddItem } from "components/BoardsContent/AddItem";
 
 import Column from "../Column/Column";
-import ColumnWrapper from "../Column/ColumnWrapper";
 
 export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -44,9 +44,14 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   }
 
   const onColumnDrop = (result: DropResult) => {
-    if (!board || !columns) return;
-    const { removedIndex, addedIndex } = result;
-    if (removedIndex === null && addedIndex === null) return;
+    if (
+      !board ||
+      !columns ||
+      result.addedIndex === null ||
+      result.removedIndex === null ||
+      result.removedIndex === result.addedIndex
+    )
+      return;
 
     let newColumns = [...columns];
     newColumns = applyDrag(newColumns, result);
@@ -66,7 +71,7 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   };
 
   const onCardDrop = (column_Id: ColumnTypes["_id"], result: DropResult) => {
-    if (!columns) return;
+    if (!columns || result.removedIndex === result.addedIndex) return;
 
     if (result.addedIndex !== null || result.removedIndex !== null) {
       let newColumns = [...columns];
@@ -132,7 +137,10 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
   };
 
   return (
-    <div
+    <motion.div
+      transition={{ bounce: 0 }}
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
       className={`boardBodyScrollBar absolute inset-0 flex overflow-x-auto overflow-y-hidden px-3 pb-2 ${
         stopScrollingX
           ? `snap-none scroll-auto`
@@ -157,36 +165,38 @@ export default function BoardContent({ boardData }: { boardData: BoardTypes }) {
             }}
             getChildPayload={(index) => columns[index]}
           >
-            {columns &&
-              columns.map((column: ColumnTypes) => (
-                <Column
-                  key={column._id}
-                  column={column}
-                  onCardDrop={onCardDrop}
-                  setAllowDrag={setAllowDrag}
-                  board={board}
-                  onUpdateColumn={onUpdateColumn}
-                />
-              ))}
+            <AnimatePresence>
+              {columns &&
+                columns.map((column: ColumnTypes) => (
+                  <Column
+                    key={column._id}
+                    board={board}
+                    column={column}
+                    setAllowDrag={setAllowDrag}
+                    onUpdateColumn={onUpdateColumn}
+                    onCardDrop={onCardDrop}
+                  />
+                ))}
+            </AnimatePresence>
           </Container>
-          <ColumnWrapper>
+          <div className="column-wrapper">
             <div
               onMouseDown={() => setAllowDrag(false)}
               onMouseUp={() => setAllowDrag(true)}
               onMouseLeave={() => setAllowDrag(true)}
             >
               <AddItem
-                title="Dodaj kolejną listę"
+                title="Dodaj nową listę"
                 placeholder="Wpisz tytuł listy"
                 board={board}
                 addItemFunction={addItemFunction}
               />
             </div>
-          </ColumnWrapper>
+          </div>
         </>
       ) : (
-        <Loader loadingText="⏳ Ładowanie kolumn..." />
+        <Loader loadingText="Ładowanie kolumn..." />
       )}
-    </div>
+    </motion.div>
   );
 }

@@ -9,24 +9,31 @@
     --white: 250 250 250;
     --black: 36 36 36;
     --error: 255 51 51;
+    --errorDark: 175 0 0;
   }
 }
 
 @layer components {
-  .btn-icon {
-    @apply flex h-[32px] w-[32px] flex-none items-center justify-center rounded-md hover:bg-neutral-300/50 dark:hover:bg-neutral-50/30 md:h-[36px] md:w-[36px];
+  .defaultHover {
+    @apply hover:bg-neutral-300/70;
   }
-  .btn-default {
-    @apply flex items-center justify-center rounded-md px-[13px] py-[7px] md:px-[16px] md:py-[9px];
+  .errorColor {
+    @apply bg-error text-white hover:bg-errorDark/90;
+  }
+  .grayColor {
+    @apply bg-neutral-400 text-white hover:bg-neutral-600/90 hover:text-white;
+  }
+  .defaultColor {
+    @apply bg-current-1 text-white hover:bg-white/70 hover:text-current-1;
   }
   .icon {
     @apply h-[60%] w-[60%];
   }
-  .icon-sm {
+  .iconSm {
     @apply h-[50%] w-[50%];
   }
-  .icon-xs {
-    @apply h-[30%] w-[30%];
+  .iconXs {
+    @apply h-[35%] w-[35%];
   }
   .border-default {
     @apply border-neutral-300/20;

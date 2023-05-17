@@ -8,6 +8,9 @@ import { BoardTypes } from "types/ContentDataStructure";
 import { updateBoard } from "services/putApi";
 import { dateFormater } from "utils/dateFormater";
 
+import { Button } from "components/atoms/Button";
+import { ButtonIcon } from "components/atoms/ButtonIcon";
+
 export default function HomeBoard({
   board,
   onUpdateBoard,
@@ -31,23 +34,26 @@ export default function HomeBoard({
     <motion.div
       initial={{ scale: 0.5, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.5, opacity: 0 }}
     >
       {!toggleDelete ? (
-        <Link href={board._id}>
+        <Link href={board._id} className="focusOutline">
           <div className="mx-auto flex h-44 w-10/12 flex-col justify-between overflow-hidden rounded-lg bg-current-2 p-3 drop-shadow-lg transition-transform hover:scale-105 xs:w-7/12 sm:w-60">
             <p className="max-h-[80px] overflow-hidden font-bold">
               {board.title}
             </p>
             <div className="flex justify-between text-right">
               <div className="flex items-end">
-                <button
+                <ButtonIcon
+                  color="none"
+                  Icon={MdDelete}
+                  iconSize="icon"
+                  restClassNames="defaultHover"
                   onClick={(e) => {
                     setToggleDelete(true);
                     e.preventDefault();
                   }}
-                >
-                  <MdDelete className="btn-icon h-7 w-7" />
-                </button>
+                />
               </div>
               <div>
                 <div>
@@ -77,18 +83,12 @@ export default function HomeBoard({
             ?
           </p>
           <div className="flex gap-5">
-            <button
-              className="btn-default bg-error text-white hover:bg-error/80 focus:bg-error"
-              onClick={() => handleDeleteBoard()}
-            >
+            <Button color="errorColor" onClick={() => handleDeleteBoard()}>
               Usuń
-            </button>
-            <button
-              className="btn-default bg-neutral-400 text-white hover:bg-neutral-400/80"
-              onClick={() => setToggleDelete(false)}
-            >
-              <div>Anuluj</div>
-            </button>
+            </Button>
+            <Button color="grayColor" onClick={() => setToggleDelete(false)}>
+              Anuluj
+            </Button>
           </div>
         </div>
       )}

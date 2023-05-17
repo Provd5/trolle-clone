@@ -7,7 +7,7 @@ import { BoardTypes } from "types/ContentDataStructure";
 
 import { dateFormater } from "utils/dateFormater";
 
-import Loader from "components/atoms/Loader";
+import { Loader } from "components/atoms/Loader";
 import { ModalsType } from "components/Navbar/Navbar";
 
 export default function BoardsModal({
@@ -29,12 +29,12 @@ export default function BoardsModal({
     <div className="flex max-h-[75vh] w-60 flex-col gap-1 text-current-1">
       <Link
         href={"/"}
-        className="mb-1 flex justify-center p-1 font-bold"
+        className="mb-1 flex justify-center p-1 font-bold hover:scale-105"
         onClick={() => toggleModal(null)}
       >
-        Twoje tablice:
+        Twoje tablice
       </Link>
-      <div className="flex flex-col gap-1 overflow-auto">
+      <div className="verticalScrollBar flex flex-col overflow-auto">
         {boardDataState ? (
           boardDataState.map((boardData) => (
             <Link
@@ -42,7 +42,7 @@ export default function BoardsModal({
               key={boardData._id}
               onClick={() => toggleModal(null)}
             >
-              <div className="mx-1 rounded bg-current-1 px-1 py-3 text-md text-white hover:bg-current-1/80">
+              <div className="m-1 rounded bg-current-1 px-1 py-3 text-md text-white hover:bg-current-1/80">
                 <div className="flex flex-wrap items-center gap-x-0.5">
                   <MdOutlineSubtitles />{" "}
                   <span className="font-bold">Nazwa:</span>{" "}
@@ -69,14 +69,14 @@ export default function BoardsModal({
             </Link>
           ))
         ) : (
-          <Loader loadingText="⏳ Ładowanie..." error={isError} />
+          <Loader error={isError} />
         )}
       </div>
       {window.location.pathname !== "/" && (
         <Link
           href={"/"}
           onClick={() => toggleModal(null)}
-          className="flex items-center gap-0.5 rounded p-2 hover:bg-neutral-300/70"
+          className="defaultHover flex items-center gap-0.5 rounded p-2"
         >
           <AiOutlinePlus />
           Stwórz tablicę

@@ -1,4 +1,2 @@
-dodawanie usuwanie tablic
-strona karty
-usuwanie karty
+
 usuwanie wszyskich kart z kolumny

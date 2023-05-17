@@ -15,6 +15,9 @@ import { useClickOutside } from "hooks/useClickOutside";
 import { useDragScroll } from "hooks/useDragScroll";
 import { adjustHeight } from "utils/adjustHeight";
 
+import { Button } from "components/atoms/Button";
+import { ButtonIcon } from "components/atoms/ButtonIcon";
+
 export function AddItem({
   title,
   placeholder,
@@ -83,7 +86,7 @@ export function AddItem({
           ? `w-64 bg-neutral-200/30 p-1 dark:bg-neutral-800/40 ${
               !toggleInput &&
               `hover:bg-neutral-200/40
-          hover:dark:bg-neutral-800/60`
+          hover:dark:bg-neutral-900/50`
             }`
           : `m-1 w-full ${
               !toggleInput &&
@@ -118,22 +121,19 @@ export function AddItem({
                 addNewItem();
               }
             }}
+            maxLength={255}
           />
           <div className="mt-2 flex items-center gap-2 md:gap-1">
-            <button
-              className="btn-default bg-current-1 text-white hover:bg-current-2"
-              onClick={addNewItem}
-            >
+            <Button color="defaultColor" onClick={addNewItem}>
               Dodaj
-            </button>
-            <button
-              className="btn-icon"
-              onClick={() => {
-                setToggleInput(false);
-              }}
-            >
-              <RxCross1 className="icon-sm" />
-            </button>
+            </Button>
+            <ButtonIcon
+              color="none"
+              restClassNames="defaultHover"
+              onClick={() => setToggleInput(false)}
+              Icon={RxCross1}
+              iconSize="iconSm"
+            />
           </div>
         </div>
       )}

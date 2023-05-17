@@ -1,4 +1,5 @@
-.columnBodyScrollBar::-webkit-scrollbar {
+.verticalScrollBar::-webkit-scrollbar,
+.verticalScrollBarWhite::-webkit-scrollbar {
   height: 8px;
   width: 8px;
 }
@@ -14,21 +15,33 @@
   width: 4px;
 }
 
-.columnBodyScrollBar::-webkit-scrollbar-track,
-.columnBodyScrollBar::-webkit-scrollbar-thumb,
+.verticalScrollBar::-webkit-scrollbar-track,
+.verticalScrollBar::-webkit-scrollbar-thumb,
+.verticalScrollBarWhite::-webkit-scrollbar-track,
+.verticalScrollBarWhite::-webkit-scrollbar-thumb,
 .boardBodyScrollBar::-webkit-scrollbar-track,
 .boardBodyScrollBar::-webkit-scrollbar-thumb {
   border-radius: 3px;
 }
 
-.columnBodyScrollBar::-webkit-scrollbar-track {
+.verticalScrollBar::-webkit-scrollbar-track {
   background: rgba(128, 128, 128, 0.2);
 }
-.columnBodyScrollBar::-webkit-scrollbar-thumb {
+.verticalScrollBar::-webkit-scrollbar-thumb {
   background: rgba(128, 128, 128, 0.3);
 }
-.columnBodyScrollBar::-webkit-scrollbar-thumb:hover {
+.verticalScrollBar::-webkit-scrollbar-thumb:hover {
   background: rgba(128, 128, 128, 0.4);
+}
+
+.verticalScrollBarWhite::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.2);
+}
+.verticalScrollBarWhite::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+}
+.verticalScrollBarWhite::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .boardBodyScrollBar::-webkit-scrollbar-track {
