@@ -55,10 +55,10 @@ export default function CardInfo({
   };
 
   return (
-    <div className="mr-1 flex flex-col gap-2">
+    <div className="mr-1 flex flex-col gap-1">
       <div className="flex items-center gap-1">
         <Icon />
-        <h1 className="truncate font-bold">{title}:</h1>
+        <h1 className="font-bold">{title}:</h1>
       </div>
       {editData && dataType === "cover" && (
         <p className="text-sm">podaj link(url)</p>
@@ -90,7 +90,13 @@ export default function CardInfo({
           cardData && (
             <button
               className={`pl-2 text-left ${
-                dataType === "title" ? "text-2xl" : "text-xl"
+                dataType === "title"
+                  ? "text-2xl"
+                  : dataType === "desc"
+                  ? "text-xl"
+                  : dataType === "cover"
+                  ? "truncate text-xl"
+                  : ""
               }`}
               onClick={() => setEditData(true)}
             >

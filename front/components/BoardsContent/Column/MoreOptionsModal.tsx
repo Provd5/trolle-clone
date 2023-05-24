@@ -19,18 +19,13 @@ export default function MoreOptionsModal({
         ref={modalRef}
         className={` absolute right-[-20px] top-[40px] z-50 flex w-[200px] flex-col items-start justify-center rounded border border-neutral-400/50 bg-neutral-100 shadow-lg dark:bg-neutral-900`}
       >
-        <button className="dropdown-item">
-          <div className="text-start">
-            Nie wiem co ale wpiszę tutaj długi tekst
-          </div>
-        </button>
         {!openConfirmModal ? (
           <button
             className="dropdown-item"
             onClick={() => setOpenConfirmModal(true)}
           >
-            <div className="flex items-center gap-1 text-start">
-              <MdDelete className="text-error" /> Usuń listę
+            <div className="flex items-center gap-1 text-start text-error">
+              <MdDelete /> Usuń listę
             </div>
           </button>
         ) : (
