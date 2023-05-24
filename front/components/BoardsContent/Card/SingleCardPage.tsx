@@ -5,6 +5,7 @@ import { BsCardImage, BsTextLeft } from "react-icons/bs";
 import { MdDateRange, MdDelete, MdUpdate } from "react-icons/md";
 import { RxCross1, RxText } from "react-icons/rx";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
 
 import { CardTypes } from "types/ContentDataStructure";
@@ -58,9 +59,11 @@ export default function SingleCardPage({ cardId }: { cardId: string }) {
     <>
       {!cardData ? (
         <Loader error={isError} />
+      ) : !cardData.boardId ? (
+        notFound()
       ) : (
         <motion.div
-          className="relative mx-[10vw] my-[5vh] h-full overflow-hidden rounded-lg"
+          className="relative mx-3 my-3 h-full overflow-y-auto overflow-x-hidden rounded-lg md:mx-[7vw] md:my-7 xl:mx-auto xl:max-w-[1200px]"
           initial={{ x: "-100%", opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
@@ -72,7 +75,7 @@ export default function SingleCardPage({ cardId }: { cardId: string }) {
               }}
             />
           )}
-          <div className="h-full bg-white/70 p-7 text-black backdrop-blur sm:p-10">
+          <div className="h-full bg-white/70 p-5 text-black backdrop-blur sm:p-10">
             <Link href={cardData.boardId}>
               <ButtonIcon
                 color="defaultColor"
@@ -82,8 +85,8 @@ export default function SingleCardPage({ cardId }: { cardId: string }) {
               />
             </Link>
 
-            <div className="flex h-full flex-col justify-between">
-              <div className="verticalScrollBar mr-3 flex max-h-[620px] flex-col gap-5 overflow-y-auto overflow-x-hidden">
+            <div className="flex h-full flex-col justify-between gap-3">
+              <div className="flex flex-col gap-3">
                 <CardInfo
                   title="Tytuł karty"
                   Icon={RxText}
@@ -107,7 +110,7 @@ export default function SingleCardPage({ cardId }: { cardId: string }) {
                 />
                 {cardData.cover && (
                   <div
-                    className="h-52 w-72 rounded-lg bg-cover bg-center bg-no-repeat"
+                    className="h-52 w-full rounded-lg bg-cover bg-center bg-no-repeat xs:w-80"
                     style={{
                       backgroundImage: `url("${cardData.cover}")`,
                     }}

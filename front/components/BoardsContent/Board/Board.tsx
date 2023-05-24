@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { notFound } from "next/navigation";
 
 import { BoardTypes } from "types/ContentDataStructure";
 
@@ -19,14 +20,16 @@ export default function Board({ boardId }: { boardId: string }) {
       .catch(() => setIsError(true));
   }, [boardId]);
 
-  return boardData ? (
+  return !boardData ? (
+    <Loader loadingText="Ładowanie tablicy..." error={isError} />
+  ) : !boardData._id ? (
+    notFound()
+  ) : (
     <>
       <BoardHeader boardData={boardData} />
       <div className="relative my-2 h-full select-none">
         <BoardContent boardData={boardData} />
       </div>
     </>
-  ) : (
-    <Loader loadingText="Ładowanie tablicy..." error={isError} />
   );
 }
