@@ -38,7 +38,7 @@ export default function HomeBoard({
     >
       {!toggleDelete ? (
         <Link href={board._id} className="focusOutline">
-          <div className="mx-auto flex h-44 w-10/12 flex-col justify-between overflow-hidden rounded-lg bg-current-2 p-3 drop-shadow-lg transition-transform hover:scale-105 xs:w-7/12 sm:w-60">
+          <div className="mx-auto flex h-44 w-10/12 max-w-[260px] flex-col justify-between overflow-hidden rounded-lg bg-current-2 p-3 drop-shadow-lg transition-transform hover:scale-105 xs:w-7/12 sm:w-60">
             <p className="max-h-[80px] overflow-hidden font-bold">
               {board.title}
             </p>
