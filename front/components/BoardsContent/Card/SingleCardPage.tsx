@@ -63,7 +63,7 @@ export default function SingleCardPage({ cardId }: { cardId: string }) {
         notFound()
       ) : (
         <motion.div
-          className="relative mx-3 my-3 h-full overflow-y-auto overflow-x-hidden rounded-lg md:mx-[7vw] md:my-7 xl:mx-auto xl:max-w-[1200px]"
+          className="relative mx-3 my-3 h-full overflow-y-auto overflow-x-hidden rounded-lg md:mx-[7vw] md:my-7 xl:mx-auto xl:w-full xl:max-w-[1200px]"
           initial={{ x: "-100%", opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
